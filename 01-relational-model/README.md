@@ -28,7 +28,7 @@ Database Server consist of:
    - data (files mapping from a disk, execute plans, parsing SQL expressions and optimizations)
    - processes (reader, writer, logging, checkpoint)
 
-***
+---
 
 Relation - is a two-dimensional table structure definition (in mathematics) with the data appearing in that structure
 Relational algebra based on:
@@ -54,7 +54,7 @@ Relational operations:
  - A ⋈ B (join)
  - A ÷ B (division)
 
-***
+---
 
 Codd's 12 rules to define what is required from a database management
 
@@ -84,8 +84,7 @@ Codd's 12 rules to define what is required from a database management
 
  -	Rule 12. A relational system should modify data structures only by high-level relational language.
 
-
-*** ***
+---
 
 Null:
  - doesn't have a data type
@@ -95,7 +94,7 @@ Null:
  - each comparison with Null returns Unknown
  - there is a special function determines Null value (true|false)
 
-*** ***
+---
 
 Database Normalization - is a technique of organizing the data in the database. It encompasses a set of procedures designed to eliminate non-simple domains (non-atomic values) and the redundancy (duplication) of data.
  - 1NF: all attributes should be atomic (single value)
