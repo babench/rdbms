@@ -14,8 +14,10 @@ Schema of prototype e-commerce store:
 
 ## Documentation
 1970 - Edgar F. Codd suggest a relational model in a paper "A Relational Model of Data for Large Shared Data Banks"
+
 1974 - IBM started a research subproject "System R" named later to IBM DB2
-1979 - Relational Software, Inc released first commercial SQL RDBMS Oracle v2, later also known as Oracle Database
+
+1979 - Relational Software, Inc released first commercial SQL RDBMS Oracle v2, later also known as Oracle Database 
 
 Database Server consist of:
  - database
