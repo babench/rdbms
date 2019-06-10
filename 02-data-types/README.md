@@ -4,9 +4,13 @@ Data types
 ## Documentation
 
 SQL-86: 1st standard adopted ANSI и approved ISO in 1987
+
 SQL-89: revised standard SQL-86
+
 SQL-92: 2nd standard, the most advertised version of SQL (ISO 9075 and get FIPS 127-2)
+
 SQL-1999: 3rd standard (regexp, recursive selects, triggers, procedures, non-scalar and objects data types)
+
 SQL-2003: (window functions, sequence generators, support XML)
 
 
@@ -74,6 +78,6 @@ SQL defines standards of:
 ---
 
 
-Surrogate key (system-generated key) - a unique identifier for the entity object in the database that has no relationship to the real-world meaning of the data held in a row
-Natural key (business key) - is a type of unique key that is formed of attributes have a logical relationship to the attributes within that row
+ - Surrogate key (system-generated key) - a unique identifier for the entity object in the database that has no relationship to the real-world meaning of the data held in a row
+ - Natural key (business key) - is a type of unique key that is formed of attributes have a logical relationship to the attributes within that row
 
