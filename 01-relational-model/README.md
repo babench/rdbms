@@ -3,7 +3,7 @@ Relational algebra and model data
 Schema of prototype e-commerce store:
  - _manufacturer_ (manufacturers of items/goods)
  - _supplier_ (companies responsible for the logistics)
- - _account_ (e-commerce store accounts) 
+ - _account_ (e-commerce store accounts)
  - _item_ (items/goods of the e-commerce store)
  - _item_property_ (properties for each item)
  - _item_price_ (item prices depend on manufacturers and suppliers)
@@ -101,4 +101,3 @@ Database Normalization - is a technique of organizing the data in the database. 
  - 2NF: 1NF + simple PK => (split the main table to several tables with PK and FK)
  - 3NF: 2NF + don't have attributes with transitive dependency
  - BCNF: 3NF + all attributes that aren't part of a PK depend on the PK, but not on part of it
-

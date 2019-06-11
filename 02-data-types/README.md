@@ -3,16 +3,23 @@ Data types
 
 ## Documentation
 
-SQL-86: 1st standard adopted ANSI и approved ISO in 1987
+SQL-86 - 1st standard adopted ANSI in 1986 and approved ISO in 1987 (ISO/IEC 9075:1986)
 
-SQL-89: revised standard SQL-86
+SQL-89 - revised standard SQL-86 (ISO/IEC 9075:1989)
 
-SQL-92: 2nd standard, the most advertised version of SQL (ISO 9075 and get FIPS 127-2)
+SQL-92 - 2nd standard, the most advertised version of SQL (ISO/IEC 9075:1992 and get FIPS 127-2)
 
-SQL-1999: 3rd standard (regexp, recursive selects, triggers, procedures, non-scalar and objects data types)
+SQL:1999 - 3rd standard: regexp, recursive selects, triggers, procedures, non-scalar and objects data types (ISO/IEC 9075:1999)
 
-SQL-2003: (window functions, sequence generators, support XML)
+SQL:2003 - 4th revision of the SQL and clarifications for SQL-1999: window functions, sequence generators, support XML (ISO/IEC 9075:2003)
 
+SQL:2006 - 5th revision of the SQL (ISO/IEC 9075:2006)
+
+SQL:2008 - 6th revision of the SQL (ISO/IEC 9075:2008)
+
+SQL:2011 - 7th revision of the SQL (ISO/IEC 9075:2011)
+
+SQL:2016 - 8th revision of the SQL (ISO/IEC 9075:2016)
 
 ---
 
@@ -33,42 +40,42 @@ NULL is a special marker used to indicate that a data value doesn't exist
 
 SQL defines standards of:
  - string types (SQL 89  and 92)
-     - char (type with fixed size, unused values are space-padded)
-     - varchar (type with variable-length)
-     - text or TINYTEXT or MEDIUMTEXT and LONGTEXT (variable unlimited length, nonbinary strings, stored in a separate location)
-     - nchar / nvarchar / nclob (NATIONAL CHARACTER type using Unicode characters)
+     - `char` (type with fixed size, unused values are space-padded)
+     - `varchar` (type with variable-length)
+     - `text` or `tinytext` or `mediumtext` and `longtext` (variable unlimited length, nonbinary strings, stored in a separate location)
+     - `nchar` / `nvarchar` / `nclob` (national character type using Unicode characters)
 
  - large objects (SQL 99)
-     - clob (a collection of character data usually stored in a separate location that is referenced in the table itself)
-     - blob or TINYBLOB or BLOB or MEDIUMBLOB and LONGBLOB (binary strings data, stored in a separate location)
-     - nclob (NATIONAL CHARACTER type using Unicode characters)
-     - cannot be used in GROUP BY or ORDER BY clauses, in PK, FK or UNIQUE
+     - `clob` (a collection of character data usually stored in a separate location that is referenced in the table itself)
+     - `blob` or `tinyblob` or `blob` or `mediumblob` and `longblob` (binary strings data, stored in a separate location)
+     - `nclob` (national character type using Unicode characters)
+     - cannot be used in `group by` or `order by` clauses, in PK, FK or UNIQUE
 
  - numeric types (SQL 89 and 92)
-     - int or TINYINT or SMALLINT or BIGINT (integer values)
-     - FLOAT or REAL or DOUBLE (approximate numerical value, mantissa precision p)
-     - decimal or numeric (exact numerical; numeric(precision, scale) = precision p, scale s)
+     - `int` or `tinyint` or `smallint` or `bigint` (integer values)
+     - `float` or `real` or `double` (approximate numerical value, mantissa precision p)
+     - `decimal` or `numeric` (exact numerical; numeric(precision, scale) = precision p, scale s)
 
  - date and time types (SQL 89 and 92)
-     - date (date of year: yyyy-mm-dd)
-     - time [with time zone] (time of day types: hh:mm:ss)
-     - TIMESTAMP [WITH TIME ZONE] (combination of DATE and TIME values separated by a space with time zone: yyyy-mm-dd hh:mm:ss)
-     - INTERVAL (used to represent a measure of time between two values: days, hours, minutes, seconds and possibly fractions of a second)
+     - `date` (date of year: yyyy-mm-dd)
+     - `time` [with time zone] (time of day types: hh:mm:ss)
+     - `timestamp` [with time zone] (combination of date and time values separated by a space with time zone: yyyy-mm-dd hh:mm:ss)
+     - `interval` (used to represent a measure of time between two values: days, hours, minutes, seconds and possibly fractions of a second)
 
- - boolean type (SQL 2003)
+ - `boolean` type (SQL 2003)
      - (true | false) values
-     - supports in PostgreSQL and has a type alias in MySQL to TINYINT
+     - supports in PostgreSQL and has a type alias in MySQL to `tinyint`
 
  - composite types (SQL 2003)
-     - ARRAY (collections of values in single column)
-     - ROW (structured values in single column)
+     - `array` (collections of values in single column)
+     - `row` (structured values in single column)
 
- - xml type (SQL 2003 and 2006)
+ - `xml` type (SQL 2003 and 2006)
      - native support without first converting it to XML from one of the other SQL data types
      - type guarantees that data values should be a validated XML
      - XQuery for XML extraction and updating document
 
- - json type (SQL 2016)
+ - `json` type (SQL 2016)
      - the standard uses strings to store JSON data, not define a native type but does not prevent vendors from providing a self JSON type
      - defines functions that interpret strings as JSON data (json_object, json_array and others)
      - database vendors could support different JSON formats but RFC 7159 is the mandatory default
