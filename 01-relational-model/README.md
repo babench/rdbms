@@ -12,6 +12,50 @@ Schema of prototype e-commerce store:
  - _order_log_ (orders changelog)
 
 
+### Run
+
+ * Run container with local db
+```bash
+$ docker-compose -f ./01-relational-model/docker-compose.yml up
+```
+
+ * Show tables
+```bash
+$ docker exec -ti otus-database bash
+bash# psql -U store_user -d store
+store=# \dt otus.
+               List of relations
+ Schema |       Name       | Type  |   Owner
+--------+------------------+-------+------------
+ otus   | account          | table | store_user
+ otus   | manufacturer     | table | store_user
+ otus   | order            | table | store_user
+ otus   | order_details    | table | store_user
+ otus   | order_log        | table | store_user
+ otus   | product          | table | store_user
+ otus   | product_price    | table | store_user
+ otus   | product_property | table | store_user
+ otus   | supplier         | table | store_user
+(9 rows)
+```
+
+
+### Stop
+
+ * The app is terminated by the response to a user interrupt such as typing `^C` (Ctrl + C) or a system-wide event of a shutdown
+```bash
+...
+Killing otus-database  ... done
+```
+
+ * Remove containers and networks
+```bash
+$ docker-compose -f ./01-relational-model/docker-compose.yml down
+Removing otus-database ... done
+Removing network 01-relational-model_default
+```
+
+
 ## Documentation
 1970 - Edgar F. Codd suggest a relational model in a paper "A Relational Model of Data for Large Shared Data Banks"
 
