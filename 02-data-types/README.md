@@ -43,11 +43,11 @@ SQL defines standards of:
      - `char` (type with fixed size, unused values are space-padded)
      - `varchar` (type with variable-length)
      - `text` or `tinytext` or `mediumtext` and `longtext` (variable unlimited length, nonbinary strings, stored in a separate location)
-     - `nchar` / `nvarchar` / `nclob` (national character type using Unicode characters)
+     - `nchar` / `nvarchar` (national character type using Unicode characters)
 
  - large objects (SQL 99)
      - `clob` (a collection of character data usually stored in a separate location that is referenced in the table itself)
-     - `blob` or `tinyblob` or `blob` or `mediumblob` and `longblob` (binary strings data, stored in a separate location)
+     - `blob` or `tinyblob` or `mediumblob` and `longblob` (binary strings data, stored in a separate location)
      - `nclob` (national character type using Unicode characters)
      - cannot be used in `group by` or `order by` clauses, in PK, FK or UNIQUE
 
