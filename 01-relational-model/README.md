@@ -73,7 +73,7 @@ Relational algebra based on:
 
 Definitions:
  - domain = table column
- - tuple = row column
+ - tuple = table row
  - attribute = column name 
  - relation = table
  - degree = number of columns
