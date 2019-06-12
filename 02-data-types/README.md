@@ -1,6 +1,36 @@
 Data types
 =======
 
+### Run
+
+ - Download the jar file of SchemaSpy from the [releases page](https://github.com/schemaspy/schemaspy/releases) (I use v6.0.0)
+ - Download the jar file of [PostgreSQL JDBC driver](https://jdbc.postgresql.org/download.html) (version JDBC4.2)
+ - Run the PostgreSQL instance by [Docker Compose](https://docs.docker.com/compose/) with 
+  ```
+$ docker-compose -f ./02-data-types/docker-compose.yml up
+  ```
+ - Run SchemaSpy tool and generate HTML entity-relationship diagram 
+   - use defaults from `schemaspy.properties`
+```
+$ java -jar ./schemaspy-6.0.0.jar
+```
+ - Open document ./diagram/index.html
+
+### Stop
+
+ * The app is terminated by the response to a user interrupt such as typing `^C` (Ctrl + C) or a system-wide event of a shutdown
+```bash
+...
+Killing otus-database  ... done
+```
+
+ * Remove containers and networks
+```bash
+$ docker-compose -f ./01-relational-model/docker-compose.yml down
+Removing otus-database ... done
+Removing network 01-relational-model_default
+```
+
 ## Documentation
 
 SQL-86 - 1st standard adopted ANSI in 1986 and approved ISO in 1987 (ISO/IEC 9075:1986)
