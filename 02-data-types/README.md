@@ -66,7 +66,7 @@ SQL defines standards of:
      - (true | false) values
      - supports in PostgreSQL and has a type alias in MySQL to `tinyint`
 
- - composite types (SQL 2003)
+ - composite types (SQL 99)
      - `array` (collections of values in single column)
      - `row` (structured values in single column)
 
