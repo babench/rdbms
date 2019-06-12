@@ -1,15 +1,6 @@
 Relational algebra and model data
 =======
-Schema of prototype e-commerce store:
- - _manufacturer_ (manufacturers of items/goods)
- - _supplier_ (companies responsible for the logistics)
- - _account_ (e-commerce store accounts)
- - _item_ (items/goods of the e-commerce store)
- - _item_property_ (properties for each item)
- - _item_price_ (item prices depend on manufacturers and suppliers)
- - _order_ (clients orders)
- - _order_details_ (detailed information by each order)
- - _order_log_ (orders changelog)
+Schema of prototype e-commerce store
 
 
 ### Run
@@ -23,19 +14,19 @@ $ docker-compose -f ./01-relational-model/docker-compose.yml up
 ```bash
 $ docker exec -ti otus-database bash
 bash# psql -U store_user -d store
-store=# \dt otus.
-               List of relations
- Schema |       Name       | Type  |   Owner
---------+------------------+-------+------------
- otus   | account          | table | store_user
- otus   | manufacturer     | table | store_user
- otus   | order            | table | store_user
- otus   | order_details    | table | store_user
- otus   | order_log        | table | store_user
- otus   | product          | table | store_user
- otus   | product_price    | table | store_user
- otus   | product_property | table | store_user
- otus   | supplier         | table | store_user
+store=# \dt+ otus.
+                                                 List of relations
+ Schema |       Name       | Type  |   Owner    |    Size    |                     Description
+--------+------------------+-------+------------+------------+------------------------------------------------------
+ otus   | account          | table | store_user | 8192 bytes | e-commerce store accounts
+ otus   | manufacturer     | table | store_user | 8192 bytes | manufacturers of products
+ otus   | order            | table | store_user | 0 bytes    | clients orders
+ otus   | order_details    | table | store_user | 8192 bytes | detailed information by each order
+ otus   | order_log        | table | store_user | 0 bytes    | orders changelog
+ otus   | product          | table | store_user | 8192 bytes | products of the e-commerce store
+ otus   | product_price    | table | store_user | 0 bytes    | product prices depend on manufacturers and suppliers
+ otus   | product_property | table | store_user | 8192 bytes | properties for each product
+ otus   | supplier         | table | store_user | 8192 bytes | companies responsible for the logistics
 (9 rows)
 ```
 
@@ -82,7 +73,7 @@ Relational algebra based on:
 
 Definitions:
  - domain = table column
- - tuple = row column
+ - tuple = table row
  - attribute = column name 
  - relation = table
  - degree = number of columns
