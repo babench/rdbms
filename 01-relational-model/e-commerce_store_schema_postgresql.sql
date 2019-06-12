@@ -41,19 +41,19 @@ supplier_id         - supplier identifier (FK)
 description         - product's name or description
 count               - number of products
 deleted             - product accessibility flag
-created_time        - creation timestamp in DB
-updated_time        - last updated timestamp
+created_date        - creation timestamp in DB
+updated_date        - last updated timestamp
 */
 CREATE TABLE IF NOT EXISTS otus.product
 (
     id              BIGSERIAL PRIMARY KEY,
-    manufacturer_id BIGSERIAL     NOT NULL REFERENCES otus.manufacturer (id),
-    supplier_id     BIGSERIAL     NOT NULL REFERENCES otus.supplier (id),
+    manufacturer_id BIGINT        NOT NULL REFERENCES otus.manufacturer (id),
+    supplier_id     BIGINT        NOT NULL REFERENCES otus.supplier (id),
     description     VARCHAR(1024) NOT NULL,
-    count           int           NOT NULL,
+    count           INT           NOT NULL,
     deleted         BOOLEAN       NOT NULL DEFAULT false,
-    created_time    TIMESTAMPTZ   NOT NULL DEFAULT now(),
-    updated_time    TIMESTAMPTZ
+    created_date    TIMESTAMPTZ   NOT NULL DEFAULT now(),
+    updated_date    TIMESTAMPTZ
 );
 COMMENT ON TABLE otus.product IS 'products of the e-commerce store';
 
@@ -70,7 +70,7 @@ updated_date        - last updated timestamp
 CREATE TABLE IF NOT EXISTS otus.product_property
 (
     id           BIGSERIAL PRIMARY KEY,
-    product_id   BIGSERIAL     NOT NULL REFERENCES otus.product (id),
+    product_id   BIGINT        NOT NULL REFERENCES otus.product (id),
     property     VARCHAR(255)  NOT NULL,
     description  VARCHAR(1024) NOT NULL,
     comment      VARCHAR(1024),
@@ -91,12 +91,18 @@ CREATE TABLE IF NOT EXISTS otus.product_price
 (
     id              BIGSERIAL PRIMARY KEY,
     price           NUMERIC(14, 2) NOT NULL,
-    product_id      BIGSERIAL      NOT NULL REFERENCES otus.product (id),
-    supplier_id     BIGSERIAL      NOT NULL REFERENCES otus.supplier (id),
-    manufacturer_id BIGSERIAL      NOT NULL REFERENCES otus.manufacturer (id)
+    product_id      BIGINT         NOT NULL REFERENCES otus.product (id),
+    supplier_id     BIGINT         NOT NULL REFERENCES otus.supplier (id),
+    manufacturer_id BIGINT         NOT NULL REFERENCES otus.manufacturer (id)
 
 );
 COMMENT ON TABLE otus.product_price IS 'product prices depend on manufacturers and suppliers';
+
+
+/**
+  order status from item in a store to user delivery
+ */
+CREATE TYPE otus.account_type AS ENUM ('client', ' store_employee', 'manager');
 
 
 /*
@@ -117,18 +123,18 @@ birthdate           - account birthdate
 CREATE TABLE IF NOT EXISTS otus.account
 (
     id           BIGSERIAL PRIMARY KEY,
-    pwd_hash     VARCHAR(255) NOT NULL,
-    salt         VARCHAR(255) NOT NULL,
-    email        VARCHAR(50)  NOT NULL,
+    pwd_hash     VARCHAR(255)      NOT NULL,
+    salt         VARCHAR(255)      NOT NULL,
+    email        VARCHAR(50)       NOT NULL,
     phone        VARCHAR(15),
-    type         SMALLINT     NOT NULL,
+    type         otus.account_type NOT NULL,
     first_name   VARCHAR(100),
     middle_name  VARCHAR(100),
     surname      VARCHAR(100),
-    deleted      BOOLEAN      NOT NULL DEFAULT false,
-    created_date TIMESTAMPTZ  NOT NULL DEFAULT now(),
+    deleted      BOOLEAN           NOT NULL DEFAULT false,
+    created_date TIMESTAMPTZ       NOT NULL DEFAULT now(),
     updated_date TIMESTAMPTZ,
-    birthdate    TIMESTAMPTZ
+    birthdate    DATE
 );
 COMMENT ON TABLE otus.account IS 'e-commerce store accounts';
 
@@ -143,7 +149,7 @@ delivery_date      - actual delivery date and time
 CREATE TABLE IF NOT EXISTS otus.order
 (
     id             BIGSERIAL PRIMARY KEY,
-    owner_id       BIGSERIAL   NOT NULL REFERENCES otus.account (id),
+    owner_id       BIGINT      NOT NULL REFERENCES otus.account (id),
     created_date   TIMESTAMPTZ NOT NULL DEFAULT now(),
     scheduled_date TIMESTAMPTZ NOT NULL,
     delivered_date TIMESTAMPTZ
@@ -165,8 +171,8 @@ updated_date        - last updated timestamp
 CREATE TABLE IF NOT EXISTS otus.order_details
 (
     id           BIGSERIAL PRIMARY KEY,
-    order_id     BIGSERIAL      NOT NULL REFERENCES otus.order (id),
-    product_id   BIGSERIAL      NOT NULL REFERENCES otus.product (id),
+    order_id     BIGINT         NOT NULL REFERENCES otus.order (id),
+    product_id   BIGINT         NOT NULL REFERENCES otus.product (id),
     comment      VARCHAR(1024),
     address      VARCHAR(255)   NOT NULL,
     count        INT            NOT NULL DEFAULT 1,
@@ -194,8 +200,8 @@ created_date        - creation timestamp in DB
 CREATE TABLE IF NOT EXISTS otus.order_log
 (
     id           BIGSERIAL PRIMARY KEY,
-    order_id     BIGSERIAL         NOT NULL REFERENCES otus.order (id),
-    modified_by  BIGSERIAL         NOT NULL REFERENCES otus.account (id),
+    order_id     BIGINT            NOT NULL REFERENCES otus.order (id),
+    modified_by  BIGINT            NOT NULL REFERENCES otus.account (id),
     status       otus.order_status NOT NULL,
     created_date TIMESTAMPTZ       NOT NULL DEFAULT now()
 );
