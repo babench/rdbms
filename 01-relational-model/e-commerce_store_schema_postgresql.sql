@@ -138,13 +138,15 @@ id                  - surrogate identifier
 owner_id            - client identifier id, owner of the order (FK)
 created_date        - creation timestamp in DB
 scheduled_date      - scheduled delivery date and time
+delivery_date      - actual delivery date and time
 */
 CREATE TABLE IF NOT EXISTS otus.order
 (
     id             BIGSERIAL PRIMARY KEY,
     owner_id       BIGSERIAL   NOT NULL REFERENCES otus.account (id),
     created_date   TIMESTAMPTZ NOT NULL DEFAULT now(),
-    scheduled_date TIMESTAMPTZ NOT NULL
+    scheduled_date TIMESTAMPTZ NOT NULL,
+    delivered_date TIMESTAMPTZ
 );
 COMMENT ON TABLE otus.order IS 'clients orders';
 
