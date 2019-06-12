@@ -5,30 +5,30 @@ Data types
 
  - Download the jar file of SchemaSpy from the [releases page](https://github.com/schemaspy/schemaspy/releases) (I use v6.0.0)
  - Download the jar file of [PostgreSQL JDBC driver](https://jdbc.postgresql.org/download.html) (version JDBC4.2)
- - Run the PostgreSQL instance by [Docker Compose](https://docs.docker.com/compose/) with 
+ - Run the PostgreSQL instance by [Docker Compose](https://docs.docker.com/compose/) with
   ```
 $ docker-compose -f ./02-data-types/docker-compose.yml up
   ```
- - Run SchemaSpy tool and generate HTML entity-relationship diagram 
-   - use defaults from `schemaspy.properties`
+ - Run SchemaSpy tool and generate HTML entity-relationship diagram (use defaults from `schemaspy.properties`)
 ```
-$ java -jar ./schemaspy-6.0.0.jar
+/02-data-types$ java -jar ./schemaspy-6.0.0.jar
 ```
- - Open document ./diagram/index.html
+ - Open document `./diagram/index.html`
 
 ### Stop
 
  * The app is terminated by the response to a user interrupt such as typing `^C` (Ctrl + C) or a system-wide event of a shutdown
 ```bash
 ...
+^CGracefully stopping... (press Ctrl+C again to force)
 Killing otus-database  ... done
 ```
 
  * Remove containers and networks
 ```bash
-$ docker-compose -f ./01-relational-model/docker-compose.yml down
+$ docker-compose -f ./02-data-types/docker-compose.yml down
 Removing otus-database ... done
-Removing network 01-relational-model_default
+Removing network 02-data-types_default
 ```
 
 ## Documentation
