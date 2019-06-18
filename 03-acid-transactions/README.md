@@ -48,7 +48,6 @@ NOTICE:  order_id = 1, status = not_paid
  ok
 (1 row)
 ```
---
 
 
 ### Stop
