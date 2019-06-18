@@ -1,12 +1,71 @@
 Data types
 =======
 
-## Run
-...
+### Goal
+
+ - Business task: make an order to buy a product in an e-commerce store
+ - Implementation stages:
+   - select the client account, product and product price
+   - book the product
+   - make an order and fill order details
+ - Requirements:
+   - you can't make an order if product is unavailable
+   - you can't make multiple orders for the same unpaid product (use field `count`)
+
+### Run
+ - Run the PostgreSQL instance by [Docker Compose](https://docs.docker.com/compose/) with local db
+```bash
+$ docker-compose -f ./03-acid-transactions/docker-compose.yml up
+$ docker exec -ti otus-database bash
+bash-4.4# psql -U store_user -d store
+```
+
+ - Show test set `products` and `accounts`
+```sql
+store=# select * from otus.product;
+ id | manufacturer_id | supplier_id | description | count | deleted |         created_date          | updated_date
+----+-----------------+-------------+-------------+-------+---------+-------------------------------+--------------
+  1 |               1 |           1 | product 1   |    95 | f       | 2019-06-18 01:03:30.837038+00 |
+  2 |               1 |           1 | product 2   |    45 | f       | 2019-06-18 01:03:30.845165+00 |
+
+store=# select id,email,phone,type,first_name,surname,deleted,created_date from otus.account;
+ id |         email         |    phone     |      type      | first_name |  surname   | deleted |         created_date
+----+-----------------------+--------------+----------------+------------+------------+---------+-------------------------------
+  1 | dmitriy@invalid.test  | +71021110022 | client         | dmitriy    | shishmakov | f       | 2019-06-18 01:19:25.829491+00
+  2 | vladimir@invalid.test | +71090001122 | store_employee | vladimir   | mironov    | f       | 2019-06-18 01:19:25.832324+00
+  3 | ingvar@invalid.test   | +71090104422 | manager        | ingvar     | shishmakov | f       | 2019-06-18 01:19:25.834023+00
+```
+
+ - Use function to make a new test order `next_store_order(product_name, order_product_count, client_email)`
+```bash
+store=# SELECT next_store_order('product 1', 5, 'dmitriy@invalid.test');
+NOTICE:  product_id = 1
+NOTICE:  account_id = 1
+NOTICE:  product_price = 110.00
+NOTICE:  order_id = 1, status = not_paid
+ next_store_order
+------------------
+ ok
+(1 row)
+```
+--
 
 
-## Stop
+### Stop
+
+ * The app is terminated by the response to a user interrupt such as typing `^C` (Ctrl + C) or a system-wide event of a shutdown
+```bash
 ...
+^CGracefully stopping... (press Ctrl+C again to force)
+Killing otus-database  ... done
+```
+
+ * Remove containers and networks
+```bash
+$ docker-compose -f ./03-acid-transactions/docker-compose.yml down
+Removing otus-database ... done
+Removing network 03-acid-transactions_default
+```
 
 
 ## Documentation
@@ -17,7 +76,7 @@ Data types
  - N statements with `autocommit=true` -> N transactions
  - N statements with `autocommit=false` + commit -> 1 transaction
 
-[Savepoint](https://en.wikipedia.org/wiki/Savepoint) is an SQL statement divides a transaction on logical points: 
+[Savepoint](https://en.wikipedia.org/wiki/Savepoint) is an SQL statement divides a transaction on logical points:
  - help to control the statements in a transaction in a more granular fashion through
  - allow to selectively discard parts of the transaction, while committing the rest
 
@@ -27,11 +86,11 @@ Data types
 BEGIN;
   UPDATE accounts SET balance = balance - 100.00 WHERE name = 'Alice';
   SAVEPOINT my_savepoint;
-  
+
   UPDATE accounts SET balance = balance + 100.00 WHERE name = 'Bob';
   -- oops ... forget that and use Wally's account
   ROLLBACK TO my_savepoint;
-  
+
   UPDATE accounts SET balance = balance + 100.00 WHERE name = 'Wally';
 COMMIT;
 
@@ -157,10 +216,10 @@ Features:
 
 `PostgreSQL` uses `MVCC`:
  - values don't update and don't delete (immutable)
- - each tuple has fields: 
+ - each tuple has fields:
      - xmin (first transaction ID, added row to the table);
      - xmax (last transaction ID, deleted row in the table);
-     - cmin (command number that added row); 
+     - cmin (command number that added row);
      - cmax (command number that deleted row);
  - uses sequential transaction numbers (INT type = 32 bit) that keep by each tuple
  - uses `VACUUM` is a tool to garbage-collect old tuples and optionally analyze a database
@@ -171,16 +230,16 @@ Features:
 `MySQL` starts one process and many worker threads
 
 `Oracle`, `PostgreSQL` start many worker processes
- - `postmaster` --(fork)--> `startup` defines data structures (transactional `xlog` buffer, commit `clog` buffer, buffer cache, `$PGDATA` file system structure) 
+ - `postmaster` --(fork)--> `startup` defines data structures (transactional `xlog` buffer, commit `clog` buffer, buffer cache, `$PGDATA` file system structure)
  - `postmaster` --(fork)--> `WAL writer` (write-ahead log)
  - `postmaster` --(fork)--> `writer` (write files data)
  - `postmaster` --(fork)--> `checkpointer` (merge buffer cache, `xlog` and `clog`)
- - `postmaster` --(fork)--> `autovacuum` launcher 
+ - `postmaster` --(fork)--> `autovacuum` launcher
  - client connect to `postmaster` --(fork)--> create `server process`
 
  - client sent a statement `update table...` --(authentification)--> `server process`
    - `server process` --> `parse` client statement
-   - `server process` --> `rewrite` client statement by statement optimizer 
+   - `server process` --> `rewrite` client statement by statement optimizer
    - `server process` --> build `query plan` of client statement
    - `server process` --> execute client statement (get data from disk)
    - `server process` --> write to `WAL`
