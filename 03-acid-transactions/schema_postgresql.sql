@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS otus.account
 (
     id           BIGSERIAL PRIMARY KEY,
     pwd_hash     VARCHAR(255)      NOT NULL,
-    email        VARCHAR(50)       NOT NULL,
+    email        VARCHAR(50)       NOT NULL UNIQUE,
     phone        VARCHAR(15),
     type         otus.account_type NOT NULL,
     first_name   VARCHAR(100),
@@ -137,14 +137,17 @@ CREATE TABLE IF NOT EXISTS otus.order
 (
     id             BIGSERIAL PRIMARY KEY,
     owner_id       BIGINT            NOT NULL REFERENCES otus.account (id),
+    product_id     BIGINT            NOT NULL REFERENCES otus.product (id),
     status         otus.order_status NOT NULL,
     created_date   TIMESTAMPTZ       NOT NULL DEFAULT now(),
     scheduled_date TIMESTAMPTZ       NOT NULL,
-    delivered_date TIMESTAMPTZ
+    delivered_date TIMESTAMPTZ,
+    UNIQUE (owner_id, product_id, status)
 );
 COMMENT ON TABLE otus.order IS 'clients orders';
 COMMENT ON COLUMN otus.order.id IS 'surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store';
 COMMENT ON COLUMN otus.order.owner_id IS 'client identifier id, owner of the order (FK)';
+COMMENT ON COLUMN otus.order.product_id IS 'product identifier (FK)';
 COMMENT ON COLUMN otus.order.status IS 'order status; enum type comprises a static and ordered set of values that helps to escape errors';
 COMMENT ON COLUMN otus.order.created_date IS 'creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared';
 COMMENT ON COLUMN otus.order.scheduled_date IS 'scheduled delivery date and time; helps to define a date and time in a concrete time zone';
