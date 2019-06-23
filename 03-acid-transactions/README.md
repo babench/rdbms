@@ -23,13 +23,13 @@ bash-4.4# psql -U store_user -d store
  - Show test set `products` and `accounts`
 ```sql
 store=# select * from otus.product;
- id | manufacturer_id | supplier_id | description | count | deleted |         created_date          | updated_date
+ id | manufacturer_id | supplier_id | description | count | deleted |         created_date          | updated_time
 ----+-----------------+-------------+-------------+-------+---------+-------------------------------+--------------
   1 |               1 |           1 | product 1   |    95 | f       | 2019-06-18 01:03:30.837038+00 |
   2 |               1 |           1 | product 2   |    45 | f       | 2019-06-18 01:03:30.845165+00 |
 
-store=# select id,email,phone,type,first_name,surname,deleted,created_date from otus.account;
- id |         email         |    phone     |      type      | first_name |  surname   | deleted |         created_date
+store=# select id,email,phone,type,first_name,surname,deleted,created_time from otus.account;
+ id |         email         |    phone     |      type      | first_name |  surname   | deleted |         created_time
 ----+-----------------------+--------------+----------------+------------+------------+---------+-------------------------------
   1 | dmitriy@invalid.test  | +71021110022 | client         | dmitriy    | shishmakov | f       | 2019-06-18 01:19:25.829491+00
   2 | vladimir@invalid.test | +71090001122 | store_employee | vladimir   | mironov    | f       | 2019-06-18 01:19:25.832324+00
@@ -38,7 +38,7 @@ store=# select id,email,phone,type,first_name,surname,deleted,created_date from 
 
  - Use function to make a new test order `next_store_order(product_name, order_product_count, client_email)`
 ```bash
-store=# SELECT next_store_order('product 1', 5, 'dmitriy@invalid.test');
+store=# call next_store_order('product 1', 5, 'dmitriy@invalid.test');
 NOTICE:  product_id = 1
 NOTICE:  account_id = 1
 NOTICE:  product_price = 110.00
@@ -46,6 +46,21 @@ NOTICE:  order_id = 1, status = not_paid
  next_store_order
 ------------------
  ok
+(1 row)
+```
+
+ - Show test order that not yet paid
+```sql
+store=# select * from otus.order;
+ id | owner_id | product_id |  status  |         created_time          |        scheduled_time         | delivered_time
+----+----------+------------+----------+-------------------------------+-------------------------------+----------------
+  1 |        1 |          1 | not_paid | 2019-06-23 13:41:42.996969+00 | 2019-06-26 13:41:42.996969+00 |
+(1 row)
+
+store=# select * from otus.order_log;
+ id | order_id | modified_by |  status  |         created_time
+----+----------+-------------+----------+-------------------------------
+  1 |        1 |           1 | not_paid | 2019-06-23 13:41:42.996969+00
 (1 row)
 ```
 
