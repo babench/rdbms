@@ -5,14 +5,16 @@ Data types
 
  - Download the jar file of SchemaSpy from the [releases page](https://github.com/schemaspy/schemaspy/releases) (I use v6.0.0)
  - Download the jar file of [PostgreSQL JDBC driver](https://jdbc.postgresql.org/download.html) (version JDBC4.2)
- - Run the PostgreSQL instance by [Docker Compose](https://docs.docker.com/compose/) with
-  ```
+ - Run the PostgreSQL instance by [Docker Compose](https://docs.docker.com/compose/) with local db
+```bash
 $ docker-compose -f ./02-data-types/docker-compose.yml up
-  ```
- - Run SchemaSpy tool and generate HTML entity-relationship diagram (use defaults from `schemaspy.properties`)
 ```
+
+ - Run SchemaSpy tool and generate HTML entity-relationship diagram (use defaults from `schemaspy.properties`)
+```bash
 /02-data-types$ java -jar ./schemaspy-6.0.0.jar
 ```
+
  - Open document `./diagram/index.html`
 
 ### Stop
