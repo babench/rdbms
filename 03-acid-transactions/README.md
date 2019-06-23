@@ -1,4 +1,4 @@
-Data types
+ACID. Transactions
 =======
 
 ### Goal
