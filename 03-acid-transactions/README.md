@@ -22,35 +22,42 @@ bash-4.4# psql -U store_user -d store
 
  - Show test set `products` and `accounts`
 ```sql
-store=# select * from otus.product;
- id | manufacturer_id | supplier_id | description | count | deleted |         created_date          | updated_time
+store=# select * from otus.product order by id;
+ id | manufacturer_id | supplier_id | description | count | deleted |         created_time          | updated_time
 ----+-----------------+-------------+-------------+-------+---------+-------------------------------+--------------
-  1 |               1 |           1 | product 1   |    95 | f       | 2019-06-18 01:03:30.837038+00 |
-  2 |               1 |           1 | product 2   |    45 | f       | 2019-06-18 01:03:30.845165+00 |
+  1 |               1 |           1 | product 1   |   100 | f       | 2019-06-23 14:32:30.971681+00 |
+  2 |               1 |           1 | product 2   |    50 | f       | 2019-06-23 14:32:30.978396+00 |
+(2 rows)
 
-store=# select id,email,phone,type,first_name,surname,deleted,created_time from otus.account;
+store=# select id,email,phone,type,first_name,surname,deleted,created_time from otus.account order by id;
  id |         email         |    phone     |      type      | first_name |  surname   | deleted |         created_time
 ----+-----------------------+--------------+----------------+------------+------------+---------+-------------------------------
-  1 | dmitriy@invalid.test  | +71021110022 | client         | dmitriy    | shishmakov | f       | 2019-06-18 01:19:25.829491+00
-  2 | vladimir@invalid.test | +71090001122 | store_employee | vladimir   | mironov    | f       | 2019-06-18 01:19:25.832324+00
-  3 | ingvar@invalid.test   | +71090104422 | manager        | ingvar     | shishmakov | f       | 2019-06-18 01:19:25.834023+00
+  1 | dmitriy@invalid.test  | +71021110022 | client         | dmitriy    | shishmakov | f       | 2019-06-23 14:32:30.959585+00
+  2 | vladimir@invalid.test | +71090001122 | store_employee | vladimir   | mironov    | f       | 2019-06-23 14:32:30.964396+00
+  3 | ingvar@invalid.test   | +71090104422 | manager        | ingvar     | shishmakov | f       | 2019-06-23 14:32:30.966799+00
+(3 rows)
 ```
 
  - Use function to make a new test order `next_store_order(product_name, order_product_count, client_email)`
 ```bash
 store=# call next_store_order('product 1', 5, 'dmitriy@invalid.test');
-NOTICE:  product_id = 1
-NOTICE:  account_id = 1
+NOTICE:  product_id = 1, name = product 1
 NOTICE:  product_price = 110.00
+NOTICE:  account_id = 1, e-mail = dmitriy@invalid.test
+NOTICE:  schedule_interval = 3 days
 NOTICE:  order_id = 1, status = not_paid
- next_store_order
-------------------
- ok
-(1 row)
+CALL
 ```
 
- - Show test order that not yet paid
+ - Show booked product and order that not yet paid
 ```sql
+store=# select * from otus.product order by id;
+ id | manufacturer_id | supplier_id | description | count | deleted |         created_time          | updated_time
+----+-----------------+-------------+-------------+-------+---------+-------------------------------+--------------
+  1 |               1 |           1 | product 1   |    95 | f       | 2019-06-23 14:32:30.971681+00 |
+  2 |               1 |           1 | product 2   |    50 | f       | 2019-06-23 14:32:30.978396+00 |
+(2 rows)
+
 store=# select * from otus.order;
  id | owner_id | product_id |  status  |         created_time          |        scheduled_time         | delivered_time
 ----+----------+------------+----------+-------------------------------+-------------------------------+----------------
@@ -60,10 +67,17 @@ store=# select * from otus.order;
 store=# select * from otus.order_log;
  id | order_id | modified_by |  status  |         created_time
 ----+----------+-------------+----------+-------------------------------
-  1 |        1 |           1 | not_paid | 2019-06-23 13:41:42.996969+00
+  1 |        1 |           1 | not_paid | 2019-06-23 14:33:42.106566+00
 (1 row)
 ```
 
+ - Rollback transaction if product already ordered but not paid
+```sql
+store=# call next_store_order('product 1', 5, 'dmitriy@invalid.test');
+store=# call next_store_order('product 1', 5, 'dmitriy@invalid.test');
+NOTICE:  product_id = 1, name = product 1 for account_id = 1, e-mail = dmitriy@invalid.test; product already ordered but not paid, please cancel order or increase the count of products in order
+CALL
+```
 
 ### Stop
 
