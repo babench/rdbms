@@ -11,6 +11,6 @@ services:
     volumes:
       - ./schema_postgresql.sql:/docker-entrypoint-initdb.d/1-schema.sql
       - ./data_postgresql.sql:/docker-entrypoint-initdb.d/2-data.sql
-      - ./function_postgresql.sql:/docker-entrypoint-initdb.d/3-function.sql
+      - ./procedure_next_order_postgresql.sql:/docker-entrypoint-initdb.d/3-procedure_next_order.sql
     ports:
       - "5432:5432"

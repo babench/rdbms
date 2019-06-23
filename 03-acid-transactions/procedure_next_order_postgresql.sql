@@ -48,13 +48,13 @@ BEGIN
     INSERT INTO otus.order_log (order_id, modified_by, status, created_time)
     VALUES (_order_id, _client_id, 'not_paid', now());
 
+    -- test not paid orders
     _not_paid_orders := (select count(1)
                          from otus.order as o
-                         where o.owner_id = 1
-                           and o.product_id = 1
+                         where o.owner_id = _client_id
+                           and o.product_id = _product_id
                            and o.status = 'not_paid');
 
-    -- test not paid orders
     IF (_not_paid_orders > 1) THEN
         ROLLBACK;
         RAISE NOTICE '%', 'product_id = ' || _product_id || ', name = ' || _product_name || ' for account_id = ' ||
