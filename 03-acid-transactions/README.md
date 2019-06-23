@@ -1,4 +1,4 @@
-ACID. Transactions
+ACID and transactions
 =======
 
 ### Goal
