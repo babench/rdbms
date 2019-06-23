@@ -38,7 +38,7 @@ store=# select id,email,phone,type,first_name,surname,deleted,created_time from 
 (3 rows)
 ```
 
- - Use function to make a new test order `next_store_order(product_name, order_product_count, client_email)`
+ - Use stored procedure to make a new test order `next_store_order(product_name, order_product_count, client_email)`
 ```bash
 store=# call next_store_order('product 1', 5, 'dmitriy@invalid.test');
 NOTICE:  product_id = 1, name = product 1
@@ -73,7 +73,6 @@ store=# select * from otus.order_log;
 
  - Rollback transaction if product already ordered but not paid
 ```sql
-store=# call next_store_order('product 1', 5, 'dmitriy@invalid.test');
 store=# call next_store_order('product 1', 5, 'dmitriy@invalid.test');
 NOTICE:  product_id = 1, name = product 1 for account_id = 1, e-mail = dmitriy@invalid.test; product already ordered but not paid, please cancel order or increase the count of products in order
 CALL
