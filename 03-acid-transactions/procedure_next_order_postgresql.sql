@@ -1,4 +1,4 @@
--- function: use PostgreSQL
+-- procedure wuth transaction: use PostgreSQL 11+
 
 CREATE OR REPLACE PROCEDURE next_store_order(VARCHAR(512), INT, VARCHAR(50)) AS
 $$
