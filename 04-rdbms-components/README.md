@@ -211,11 +211,10 @@ create trigger <trigger_name> after insert
 
 ---
 Links:
-
- https://dev.mysql.com/doc/refman/8.0/en/innodb-index-types.html
- https://dev.mysql.com/doc/refman/8.0/en/create-table-foreign-keys.html
- https://www.postgresql.org/docs/11/sql-cluster.html
- https://www.postgresql.org/docs/11/sql-createindex.html
- https://www.postgresql.org/docs/11/ddl-constraints.html
- https://www.postgresql.org/docs/11/trigger-definition.html
- https://habr.com/ru/post/141767/
+ - https://dev.mysql.com/doc/refman/8.0/en/innodb-index-types.html
+ - https://dev.mysql.com/doc/refman/8.0/en/create-table-foreign-keys.html
+ - https://www.postgresql.org/docs/11/sql-cluster.html
+ - https://www.postgresql.org/docs/11/sql-createindex.html
+ - https://www.postgresql.org/docs/11/ddl-constraints.html
+ - https://www.postgresql.org/docs/11/trigger-definition.html
+ - https://habr.com/ru/post/141767/ 
