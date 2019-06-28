@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS otus.product
   supplier_id     BIGINT        NOT NULL REFERENCES otus.supplier (id),
   tag             VARCHAR(15)   NOT NULL,
   description     VARCHAR(1024) NOT NULL,
-  count           INT           NOT NULL,
+  count           INT           NOT NULL CHECK (count >= 0),
   deleted         BOOLEAN       NOT NULL DEFAULT false,
   created_time    TIMESTAMPTZ   NOT NULL DEFAULT now(),
   updated_time    TIMESTAMPTZ
@@ -78,10 +78,10 @@ COMMENT ON COLUMN otus.product.created_time IS 'creation timestamp in DB; it is 
 COMMENT ON COLUMN otus.product.updated_time IS 'last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated';
 
 CREATE INDEX IF NOT EXISTS otus.product_manufacturer_id_supplier_id_idx ON otus.product (manufacturer_id, supplier_id);
-COMMENT ON INDEX otus.product_manufacturer_id_supplier_id_idx IS 'need to search for products by manufacturers and suppliers';
 CREATE INDEX IF NOT EXISTS otus.product_tag_idx ON otus.product (tag);
-COMMENT ON INDEX otus.product_tag_idx IS 'tag is metadata for searching by supplier';
 CREATE INDEX IF NOT EXISTS otus.product_deleted_idx ON otus.product (deleted, count) where deleted = false and count > 0;
+COMMENT ON INDEX otus.product_manufacturer_id_supplier_id_idx IS 'need to search for products by manufacturers and suppliers';
+COMMENT ON INDEX otus.product_tag_idx IS 'tag is metadata for searching by supplier';
 COMMENT ON INDEX otus.product_deleted_idx IS 'search for products currently available for purchases';
 
 
@@ -111,7 +111,7 @@ COMMENT ON INDEX otus.product_product_id_idx IS 'helps to select exact propertie
 CREATE TABLE IF NOT EXISTS otus.product_price
 (
   id              BIGSERIAL PRIMARY KEY,
-  price           NUMERIC(14, 2) NOT NULL,
+  price           NUMERIC(14, 2) NOT NULL CHECK (price > 0),
   product_id      BIGINT         NOT NULL REFERENCES otus.product (id),
   supplier_id     BIGINT         NOT NULL REFERENCES otus.supplier (id),
   manufacturer_id BIGINT         NOT NULL REFERENCES otus.manufacturer (id)
@@ -125,8 +125,8 @@ COMMENT ON COLUMN otus.product_price.supplier_id IS 'supplier identifier (FK)';
 COMMENT ON COLUMN otus.product_price.manufacturer_id IS 'manufacturer identifier (FK)';
 
 CREATE INDEX IF NOT EXISTS otus.product_price_price_idx ON otus.product_price (price);
-COMMENT ON INDEX otus.product_price_price_idx IS 'helps to get ranges of product prices';
 CREATE INDEX IF NOT EXISTS otus.product_price_product_id_idx ON otus.product_price (product_id);
+COMMENT ON INDEX otus.product_price_price_idx IS 'helps to get ranges of product prices';
 COMMENT ON INDEX otus.product_price_product_id_idx IS 'get product price';
 
 
@@ -160,8 +160,8 @@ COMMENT ON COLUMN otus.account.updated_time IS 'last updated timestamp; it is a 
 COMMENT ON COLUMN otus.account.birthdate IS 'account birthdate; only date in the year';
 
 CREATE UNIQUE INDEX IF NOT EXISTS otus.account_email_idx ON otus.account (email);
-COMMENT ON INDEX otus.account_email_idx IS 'e-mail should be unique for all accounts; this is user login';
 CREATE INDEX IF NOT EXISTS otus.account_deleted_type_idx ON otus.account (deleted, type) where deleted = false;
+COMMENT ON INDEX otus.account_email_idx IS 'e-mail should be unique for all accounts; this is user login';
 COMMENT ON INDEX otus.account_deleted_type_idx IS 'search among available accounts';
 
 
@@ -185,8 +185,8 @@ COMMENT ON COLUMN otus.order.scheduled_time IS 'scheduled delivery date and time
 COMMENT ON COLUMN otus.order.delivered_time IS 'actual delivery date and time; helps to define a date and time in a concrete time zone';
 
 CREATE INDEX IF NOT EXISTS otus.oder_product_id_owner_id_status_idx ON otus.order (product_id, owner_id, status);
-COMMENT ON INDEX otus.oder_product_id_owner_id_status_idx IS 'filter orders by product, buyer and order status';
 CREATE INDEX IF NOT EXISTS otus.oder_created_time_scheduled_time_idx ON otus.order (created_time, scheduled_time);
+COMMENT ON INDEX otus.oder_product_id_owner_id_status_idx IS 'filter orders by product, buyer and order status';
 COMMENT ON INDEX otus.oder_created_time_scheduled_time_idx IS 'sort and filter orders by creation time';
 
 
@@ -197,7 +197,7 @@ CREATE TABLE IF NOT EXISTS otus.order_details
   product_id   BIGINT         NOT NULL REFERENCES otus.product (id),
   comment      VARCHAR(1024),
   address      VARCHAR(255)   NOT NULL,
-  count        INT            NOT NULL DEFAULT 1,
+  count        INT            NOT NULL DEFAULT 1 CHECK (count > 0),
   total_price  NUMERIC(14, 2) NOT NULL,
   created_time TIMESTAMPTZ    NOT NULL DEFAULT now(),
   updated_time TIMESTAMPTZ
