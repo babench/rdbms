@@ -68,6 +68,8 @@ Referenced by:
     TABLE "otus."order"" CONSTRAINT "order_owner_id_fkey" FOREIGN KEY (owner_id) REFERENCES otus.account(id)
 ```
 
+ - View other tables in similar way...
+
  - Open document `./diagram/index.html` and ER-diagram `./e-commerce_store.pdf`
 
 ### Stop
@@ -198,17 +200,18 @@ create trigger <trigger_name> after insert
 
 
 ---
-View - is not physically materialized result table of a query
+`View` - is not physically materialized result table of a query
  - alias for a query
  - helps to hide the complexity of the original query
 
-Materialized view - physically materialized result table of a query
+`Materialized view` - physically materialized result table of a query
  - remembers the query used to initialize the view, so that it can be refreshed later upon demand
  - can be auto-updatable
 
 
 ---
 Links:
+
  https://dev.mysql.com/doc/refman/8.0/en/innodb-index-types.html
  https://dev.mysql.com/doc/refman/8.0/en/create-table-foreign-keys.html
  https://www.postgresql.org/docs/11/sql-cluster.html
