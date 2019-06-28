@@ -31,7 +31,7 @@ COMMENT ON COLUMN otus.manufacturer.description IS 'manufacturer''s name or desc
 COMMENT ON COLUMN otus.manufacturer.created_time IS 'creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared';
 COMMENT ON COLUMN otus.manufacturer.updated_time IS 'last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated';
 
-CREATE INDEX IF NOT EXISTS otus.manufacturer_tag_idx ON otus.manufacturer (tag);
+CREATE INDEX IF NOT EXISTS manufacturer_tag_idx ON otus.manufacturer (tag);
 COMMENT ON INDEX otus.manufacturer_tag_idx IS 'tag is metadata for searching by manufacturer';
 
 
@@ -50,7 +50,7 @@ COMMENT ON COLUMN otus.supplier.description IS 'supplier''s name or description;
 COMMENT ON COLUMN otus.supplier.created_time IS 'creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared';
 COMMENT ON COLUMN otus.supplier.updated_time IS 'last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated';
 
-CREATE INDEX IF NOT EXISTS otus.supplier_tag_idx ON otus.supplier (tag);
+CREATE INDEX IF NOT EXISTS supplier_tag_idx ON otus.supplier (tag);
 COMMENT ON INDEX otus.supplier_tag_idx IS 'tag is metadata for searching by supplier';
 
 
@@ -77,9 +77,9 @@ COMMENT ON COLUMN otus.product.deleted IS 'product accessibility flag; true and 
 COMMENT ON COLUMN otus.product.created_time IS 'creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared';
 COMMENT ON COLUMN otus.product.updated_time IS 'last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated';
 
-CREATE INDEX IF NOT EXISTS otus.product_manufacturer_id_supplier_id_idx ON otus.product (manufacturer_id, supplier_id);
-CREATE INDEX IF NOT EXISTS otus.product_tag_idx ON otus.product (tag);
-CREATE INDEX IF NOT EXISTS otus.product_deleted_idx ON otus.product (deleted, count) where deleted = false and count > 0;
+CREATE INDEX IF NOT EXISTS product_manufacturer_id_supplier_id_idx ON otus.product (manufacturer_id, supplier_id);
+CREATE INDEX IF NOT EXISTS product_tag_idx ON otus.product (tag);
+CREATE INDEX IF NOT EXISTS product_deleted_idx ON otus.product (deleted, count) where deleted = false and count > 0;
 COMMENT ON INDEX otus.product_manufacturer_id_supplier_id_idx IS 'need to search for products by manufacturers and suppliers';
 COMMENT ON INDEX otus.product_tag_idx IS 'tag is metadata for searching by supplier';
 COMMENT ON INDEX otus.product_deleted_idx IS 'search for products currently available for purchases';
@@ -104,7 +104,7 @@ COMMENT ON COLUMN otus.product_property.comment IS 'common comment; varchar is a
 COMMENT ON COLUMN otus.product_property.created_time IS 'creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared';
 COMMENT ON COLUMN otus.product_property.updated_time IS 'last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated';
 
-CREATE INDEX IF NOT EXISTS otus.product_product_id_idx ON otus.product_property (product_id);
+CREATE INDEX IF NOT EXISTS product_product_id_idx ON otus.product_property (product_id);
 COMMENT ON INDEX otus.product_product_id_idx IS 'helps to select exact properties for the products';
 
 
@@ -124,8 +124,8 @@ COMMENT ON COLUMN otus.product_price.product_id IS 'product identifier (FK)';
 COMMENT ON COLUMN otus.product_price.supplier_id IS 'supplier identifier (FK)';
 COMMENT ON COLUMN otus.product_price.manufacturer_id IS 'manufacturer identifier (FK)';
 
-CREATE INDEX IF NOT EXISTS otus.product_price_price_idx ON otus.product_price (price);
-CREATE INDEX IF NOT EXISTS otus.product_price_product_id_idx ON otus.product_price (product_id);
+CREATE INDEX IF NOT EXISTS product_price_price_idx ON otus.product_price (price);
+CREATE INDEX IF NOT EXISTS product_price_product_id_idx ON otus.product_price (product_id);
 COMMENT ON INDEX otus.product_price_price_idx IS 'helps to get ranges of product prices';
 COMMENT ON INDEX otus.product_price_product_id_idx IS 'get product price';
 
@@ -159,8 +159,8 @@ COMMENT ON COLUMN otus.account.created_time IS 'creation timestamp in DB; it is 
 COMMENT ON COLUMN otus.account.updated_time IS 'last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated';
 COMMENT ON COLUMN otus.account.birthdate IS 'account birthdate; only date in the year';
 
-CREATE UNIQUE INDEX IF NOT EXISTS otus.account_email_idx ON otus.account (email);
-CREATE INDEX IF NOT EXISTS otus.account_deleted_type_idx ON otus.account (deleted, type) where deleted = false;
+CREATE UNIQUE INDEX IF NOT EXISTS account_email_idx ON otus.account (email);
+CREATE INDEX IF NOT EXISTS account_deleted_type_idx ON otus.account (deleted, type) where deleted = false;
 COMMENT ON INDEX otus.account_email_idx IS 'e-mail should be unique for all accounts; this is user login';
 COMMENT ON INDEX otus.account_deleted_type_idx IS 'search among available accounts';
 
@@ -184,8 +184,8 @@ COMMENT ON COLUMN otus.order.created_time IS 'creation timestamp in DB; it is a 
 COMMENT ON COLUMN otus.order.scheduled_time IS 'scheduled delivery date and time; helps to define a date and time in a concrete time zone';
 COMMENT ON COLUMN otus.order.delivered_time IS 'actual delivery date and time; helps to define a date and time in a concrete time zone';
 
-CREATE INDEX IF NOT EXISTS otus.oder_product_id_owner_id_status_idx ON otus.order (product_id, owner_id, status);
-CREATE INDEX IF NOT EXISTS otus.oder_created_time_scheduled_time_idx ON otus.order (created_time, scheduled_time);
+CREATE INDEX IF NOT EXISTS oder_product_id_owner_id_status_idx ON otus.order (product_id, owner_id, status);
+CREATE INDEX IF NOT EXISTS oder_created_time_scheduled_time_idx ON otus.order (created_time, scheduled_time);
 COMMENT ON INDEX otus.oder_product_id_owner_id_status_idx IS 'filter orders by product, buyer and order status';
 COMMENT ON INDEX otus.oder_created_time_scheduled_time_idx IS 'sort and filter orders by creation time';
 
@@ -213,7 +213,7 @@ COMMENT ON COLUMN otus.order_details.total_price IS 'final price after calculati
 COMMENT ON COLUMN otus.order_details.created_time IS 'creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared';
 COMMENT ON COLUMN otus.order_details.updated_time IS 'last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated';
 
-CREATE INDEX IF NOT EXISTS otus.order_details_order_id_idx ON otus.order_details (order_id);
+CREATE INDEX IF NOT EXISTS order_details_order_id_idx ON otus.order_details (order_id);
 COMMENT ON INDEX otus.order_details_order_id_idx IS 'select detail info for order';
 
 
@@ -232,5 +232,5 @@ COMMENT ON COLUMN otus.order_log.modified_by IS 'account identifier changed the 
 COMMENT ON COLUMN otus.order_log.status IS 'order status; enum type comprises a static and ordered set of values that helps to escape errors';
 COMMENT ON COLUMN otus.order_log.created_time IS 'creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared';
 
-CREATE INDEX IF NOT EXISTS otus.order_log_order_id_idx ON otus.order_log (order_id);
+CREATE INDEX IF NOT EXISTS order_log_order_id_idx ON otus.order_log (order_id);
 COMMENT ON INDEX otus.order_log_order_id_idx IS 'select log records for order';
