@@ -1,0 +1,16 @@
+version: '3.1'
+
+services:
+  database:
+    container_name: otus-database
+    image: postgres:11.4-alpine
+    environment:
+      POSTGRES_DB: store
+      POSTGRES_USER: store_user
+      POSTGRES_PASSWORD: owner
+    volumes:
+      - ./schema_postgresql.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - ./data_postgresql.sql:/docker-entrypoint-initdb.d/2-data.sql
+      - ./procedure_next_order_postgresql.sql:/docker-entrypoint-initdb.d/3-procedure_next_order.sql
+    ports:
+      - "5432:5432"

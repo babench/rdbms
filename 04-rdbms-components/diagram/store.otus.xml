@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="store" schema="otus" type="PostgreSQL - 11.4">
+   <tables>
+      <table name="account" numRows="3" remarks="e-commerce store accounts" schema="otus" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('otus.account_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store" size="19" type="bigserial">
+            <child column="owner_id" foreignKey="order_owner_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="order"/>
+            <child column="modified_by" foreignKey="order_log_modified_by_fkey" implied="false" onDeleteCascade="false" schema="otus" table="order_log"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="pwd_hash" nullable="false" remarks="hash of account password; varchar is a variable-length character type with a chance to set a limit size of data" size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="email" nullable="false" remarks="account's e-mail aka permanent login field; varchar is a variable-length character type with a chance to set a limit size of data" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="phone" nullable="true" remarks="account's phone number; varchar is a variable-length character type with a chance to set a limit size of data" size="15" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="type" nullable="false" remarks="account type; enum type comprises a static and ordered set of values that helps to escape errors" size="2147483647" type="&quot;otus&quot;.&quot;account_type&quot;"/>
+         <column autoUpdated="false" digits="0" id="5" name="first_name" nullable="true" remarks="first name; varchar is a variable-length character type with a chance to set a limit size of data" size="100" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="middle_name" nullable="true" remarks="middle name; varchar is a variable-length character type with a chance to set a limit size of data" size="100" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="7" name="surname" nullable="true" remarks="surname; varchar is a variable-length character type with a chance to set a limit size of data" size="100" type="varchar"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="8" name="deleted" nullable="false" remarks="account accessibility flag; true and false are the possible values" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="9" name="created_time" nullable="false" remarks="creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared" size="35" type="timestamptz"/>
+         <column autoUpdated="false" digits="6" id="10" name="updated_time" nullable="true" remarks="last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated" size="35" type="timestamptz"/>
+         <column autoUpdated="false" digits="0" id="11" name="birthdate" nullable="true" remarks="account birthdate; only date in the year" size="13" type="date"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="account_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="account_deleted_type_idx" unique="false">
+            <column ascending="true" name="deleted"/>
+            <column ascending="true" name="type"/>
+         </index>
+         <index name="account_email_idx" unique="true">
+            <column ascending="true" name="email"/>
+         </index>
+      </table>
+      <table name="manufacturer" numRows="1" remarks="manufacturers of products" schema="otus" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('otus.manufacturer_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store" size="19" type="bigserial">
+            <child column="manufacturer_id" foreignKey="product_manufacturer_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="product"/>
+            <child column="manufacturer_id" foreignKey="product_price_manufacturer_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="product_price"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="tag" nullable="false" remarks="manufacturer's short name for searching" size="15" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="description" nullable="false" remarks="manufacturer's name or description; varchar is a variable-length character type with a chance to set a limit size of data" size="1024" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="3" name="created_time" nullable="false" remarks="creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared" size="35" type="timestamptz"/>
+         <column autoUpdated="false" digits="6" id="4" name="updated_time" nullable="true" remarks="last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated" size="35" type="timestamptz"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="manufacturer_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="manufacturer_tag_idx" unique="false">
+            <column ascending="true" name="tag"/>
+         </index>
+      </table>
+      <table name="order" numRows="2" remarks="clients orders" schema="otus" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('otus.order_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store" size="19" type="bigserial">
+            <child column="order_id" foreignKey="order_details_order_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="order_details"/>
+            <child column="order_id" foreignKey="order_log_order_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="order_log"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="owner_id" nullable="false" remarks="client identifier id, owner of the order (FK)" size="19" type="int8">
+            <parent column="id" foreignKey="order_owner_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="account"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="product_id" nullable="false" remarks="product identifier (FK)" size="19" type="int8">
+            <parent column="id" foreignKey="order_product_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="product"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="status" nullable="false" remarks="order status; enum type comprises a static and ordered set of values that helps to escape errors" size="2147483647" type="&quot;otus&quot;.&quot;order_status&quot;"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="4" name="created_time" nullable="false" remarks="creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared" size="35" type="timestamptz"/>
+         <column autoUpdated="false" digits="6" id="5" name="scheduled_time" nullable="false" remarks="scheduled delivery date and time; helps to define a date and time in a concrete time zone" size="35" type="timestamptz"/>
+         <column autoUpdated="false" digits="6" id="6" name="delivered_time" nullable="true" remarks="actual delivery date and time; helps to define a date and time in a concrete time zone" size="35" type="timestamptz"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="order_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="oder_created_time_scheduled_time_idx" unique="false">
+            <column ascending="true" name="created_time"/>
+            <column ascending="true" name="scheduled_time"/>
+         </index>
+         <index name="oder_product_id_owner_id_status_idx" unique="false">
+            <column ascending="true" name="product_id"/>
+            <column ascending="true" name="owner_id"/>
+            <column ascending="true" name="status"/>
+         </index>
+      </table>
+      <table name="order_details" numRows="2" remarks="detailed information by each order" schema="otus" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('otus.order_details_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store" size="19" type="bigserial"/>
+         <column autoUpdated="false" digits="0" id="1" name="order_id" nullable="false" remarks="order identifier (FK)" size="19" type="int8">
+            <parent column="id" foreignKey="order_details_order_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="order"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="product_id" nullable="false" remarks="product identifier (FK)" size="19" type="int8">
+            <parent column="id" foreignKey="order_details_product_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="product"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="comment" nullable="true" remarks="clarifications or wishes to the order; varchar is a variable-length character type with a chance to set a limit size of data" size="1024" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="address" nullable="false" remarks="delivery address; varchar is a variable-length character type with a chance to set a limit size of data" size="255" type="varchar"/>
+         <column autoUpdated="false" defaultValue="1" digits="0" id="5" name="count" nullable="false" remarks="number of products; integer is the common choice for numeric type, as it offers the best balance between range, storage size, and performance" size="10" type="int4"/>
+         <column autoUpdated="false" digits="2" id="6" name="total_price" nullable="false" remarks="final price after calculations for concrete client; numeric is especially recommended type for storing monetary amounts" size="14" type="numeric"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="7" name="created_time" nullable="false" remarks="creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared" size="35" type="timestamptz"/>
+         <column autoUpdated="false" digits="6" id="8" name="updated_time" nullable="true" remarks="last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated" size="35" type="timestamptz"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="order_details_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="order_details_order_id_idx" unique="false">
+            <column ascending="true" name="order_id"/>
+         </index>
+      </table>
+      <table name="order_log" numRows="2" remarks="orders changelog" schema="otus" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('otus.order_log_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store" size="19" type="bigserial"/>
+         <column autoUpdated="false" digits="0" id="1" name="order_id" nullable="false" remarks="oder identifier (FK)" size="19" type="int8">
+            <parent column="id" foreignKey="order_log_order_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="order"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="modified_by" nullable="false" remarks="account identifier changed the order status (FK)" size="19" type="int8">
+            <parent column="id" foreignKey="order_log_modified_by_fkey" implied="false" onDeleteCascade="false" schema="otus" table="account"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="status" nullable="false" remarks="order status; enum type comprises a static and ordered set of values that helps to escape errors" size="2147483647" type="&quot;otus&quot;.&quot;order_status&quot;"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="4" name="created_time" nullable="false" remarks="creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared" size="35" type="timestamptz"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="order_log_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="order_log_order_id_idx" unique="false">
+            <column ascending="true" name="order_id"/>
+         </index>
+      </table>
+      <table name="product" numRows="2" remarks="products of the e-commerce store" schema="otus" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('otus.product_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store" size="19" type="bigserial">
+            <child column="product_id" foreignKey="order_product_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="order"/>
+            <child column="product_id" foreignKey="order_details_product_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="order_details"/>
+            <child column="product_id" foreignKey="product_price_product_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="product_price"/>
+            <child column="product_id" foreignKey="product_property_product_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="product_property"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="manufacturer_id" nullable="false" remarks="manufacturer identifier (FK)" size="19" type="int8">
+            <parent column="id" foreignKey="product_manufacturer_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="manufacturer"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="supplier_id" nullable="false" remarks="supplier identifier (FK)" size="19" type="int8">
+            <parent column="id" foreignKey="product_supplier_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="supplier"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="tag" nullable="false" remarks="product's short name for searching" size="15" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="description" nullable="false" remarks="product's name or description; varchar is a variable-length character type with a chance to set a limit size of data" size="1024" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="count" nullable="false" remarks="number of products; integer is the common choice for numeric type, as it offers the best balance between range, storage size, and performance" size="10" type="int4"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="deleted" nullable="false" remarks="product accessibility flag; true and false are the possible values" size="1" type="bool"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="7" name="created_time" nullable="false" remarks="creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared" size="35" type="timestamptz"/>
+         <column autoUpdated="false" digits="6" id="8" name="updated_time" nullable="true" remarks="last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated" size="35" type="timestamptz"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="product_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="product_deleted_idx" unique="false">
+            <column ascending="true" name="deleted"/>
+            <column ascending="true" name="count"/>
+         </index>
+         <index name="product_manufacturer_id_supplier_id_idx" unique="false">
+            <column ascending="true" name="manufacturer_id"/>
+            <column ascending="true" name="supplier_id"/>
+         </index>
+         <index name="product_tag_idx" unique="false">
+            <column ascending="true" name="tag"/>
+         </index>
+      </table>
+      <table name="product_price" numRows="2" remarks="product prices depend on manufacturers and suppliers" schema="otus" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('otus.product_price_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store" size="19" type="bigserial"/>
+         <column autoUpdated="false" digits="2" id="1" name="price" nullable="false" remarks="product cost; numeric is especially recommended type for storing monetary amounts" size="14" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="2" name="product_id" nullable="false" remarks="product identifier (FK)" size="19" type="int8">
+            <parent column="id" foreignKey="product_price_product_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="product"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="supplier_id" nullable="false" remarks="supplier identifier (FK)" size="19" type="int8">
+            <parent column="id" foreignKey="product_price_supplier_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="supplier"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="4" name="manufacturer_id" nullable="false" remarks="manufacturer identifier (FK)" size="19" type="int8">
+            <parent column="id" foreignKey="product_price_manufacturer_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="manufacturer"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="product_price_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="product_price_price_idx" unique="false">
+            <column ascending="true" name="price"/>
+         </index>
+         <index name="product_price_product_id_idx" unique="false">
+            <column ascending="true" name="product_id"/>
+         </index>
+      </table>
+      <table name="product_property" numRows="4" remarks="properties for each product" schema="otus" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('otus.product_property_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store" size="19" type="bigserial"/>
+         <column autoUpdated="false" digits="0" id="1" name="product_id" nullable="false" remarks="product identifier (FK)" size="19" type="int8">
+            <parent column="id" foreignKey="product_property_product_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="product"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="property_name" nullable="false" remarks="name of product property; varchar is a variable-length character type with a chance to set a limit size of data" size="255" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="property_desc" nullable="false" remarks="description of product property; varchar is a variable-length character type with a chance to set a limit size of data" size="1024" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="comment" nullable="true" remarks="common comment; varchar is a variable-length character type with a chance to set a limit size of data" size="1024" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="5" name="created_time" nullable="false" remarks="creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared" size="35" type="timestamptz"/>
+         <column autoUpdated="false" digits="6" id="6" name="updated_time" nullable="true" remarks="last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated" size="35" type="timestamptz"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="product_property_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="product_product_id_idx" unique="false">
+            <column ascending="true" name="product_id"/>
+         </index>
+      </table>
+      <table name="supplier" numRows="1" remarks="companies responsible for the logistics" schema="otus" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('otus.supplier_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store" size="19" type="bigserial">
+            <child column="supplier_id" foreignKey="product_supplier_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="product"/>
+            <child column="supplier_id" foreignKey="product_price_supplier_id_fkey" implied="false" onDeleteCascade="false" schema="otus" table="product_price"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="tag" nullable="false" remarks="supplier's short name for searching" size="15" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="description" nullable="false" remarks="supplier's name or description; varchar is a variable-length character type with a chance to set a limit size of data" size="1024" type="varchar"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="3" name="created_time" nullable="false" remarks="creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared" size="35" type="timestamptz"/>
+         <column autoUpdated="false" digits="6" id="4" name="updated_time" nullable="true" remarks="last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated" size="35" type="timestamptz"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="supplier_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="supplier_tag_idx" unique="false">
+            <column ascending="true" name="tag"/>
+         </index>
+      </table>
+   </tables>
+</database>
