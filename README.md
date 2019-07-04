@@ -13,5 +13,5 @@ Detailed comments for each column data type
 ## Homework 3: [ACID and transactions](https://github.com/DmitriySh/rdbms-course/tree/master/03-acid-transactions)
 Describe one business transaction consists of several steps
 
-## Homework 4: [RDBMS components](https://github.com/DmitriySh/rdbms-course/tree/feature/04-rdbms-components/04-rdbms-components)
+## Homework 4: [RDBMS components](https://github.com/DmitriySh/rdbms-course/tree/master/04-rdbms-components)
 Add indexes and constraints
