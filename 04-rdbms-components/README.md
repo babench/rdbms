@@ -103,10 +103,10 @@ Users and roles
  - each SQL connection is associated with authID
 
 ```sql
-create user <username> with password '<password>'
+CREATE USER <username> WITH PASSWORD '<password>'
 
-grand connect on database <dbName> to <username>;
-grand select on table <tableName> to <username>;
+GRAND CONNECT ON DATABASE <dbName> TO <username>;
+GRAND SELECT ON TABLE <tableName> TO <username>;
 ```
 
 
@@ -115,6 +115,7 @@ grand select on table <tableName> to <username>;
  - payment acceptance
  - sale of goods in shops
  - update an account data
+
 `OLTP` features: high throughput and are insert/update intensive
 
 
@@ -122,6 +123,7 @@ grand select on table <tableName> to <username>;
  - report of total sales of each department in each month
  - identify top-saling books
  - count classes with A++ marks by half a year
+
 `OLAP` features: availability, speed, concurrency and recoverability
 
 
@@ -162,11 +164,11 @@ get connection ---> [connection pool -> pull exists or create new] ---> execute 
  - `non-clustered`: the data is present in arbitrary order, but the logical ordering is specified by the index
    - one or more per table
    - use additional disk space
-   - uses in MS SQL, MySQL
-   - PostgreSQL clusters the table by one-time operation
  - `clustered`: alters the data block into a certain distinct order to match the index
    - only one per table
    - not use additional disk space
+   - uses in MS SQL, MySQL
+   - PostgreSQL clusters the table by one-time operation
 
 
 ---
@@ -180,7 +182,7 @@ get connection ---> [connection pool -> pull exists or create new] ---> execute 
   - field(s) shouldn't have `null` value
   - automatically create a unique B-tree index on the column(s)
 - `foreign keys` specifies that the values in a column(s) must match the values appearing in some row of another table
-- `exclusion` ...
+- `exclusion` is the case with rule based on a function
 
 
 ---
@@ -194,8 +196,8 @@ get connection ---> [connection pool -> pull exists or create new] ---> execute 
  - compiled code and execution plan
 
 ```sql
-create trigger <trigger_name> after insert
-               on <table_name> for each row execute procedure <procedure_name>();
+CREATE TRIGGER <trigger_name> AFTER INSERT
+               ON <table_name> fOR EACH ROW EXECUTE PROCEDURE <procedure_name>();
 ```
 
 
