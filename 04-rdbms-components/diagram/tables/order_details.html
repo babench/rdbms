@@ -31,7 +31,7 @@
   <link rel="stylesheet" href="../bower/admin-lte/dist/css/skins/_all-skins.min.css">
   <!-- SchemaSpy -->
   <link rel="stylesheet" href="../schemaSpy.css">
-  
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -59,7 +59,7 @@
 			<li><a href="../columns.html" title="All of the columns in the schema">Columns</a></li>
 			<li><a href="../constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
 			<li><a href="../relationships.html" title="Diagram of table relationships">Relationships</a></li>
-			<li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>				
+			<li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
 			<li><a href="../anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
 			<li><a href="../routines.html" title="Procedures and functions">Routines</a></li>
           </ul>
@@ -85,11 +85,11 @@
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>			  
+              </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body clearfix">
-				<p><p>detailed information by each order</p></p>              
+				<p><p>detailed information by each order</p></p>
             </div>
             <!-- /.box-body -->
 		</div>
@@ -105,7 +105,7 @@
                 </button>
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
               </div>
-            </div>	
+            </div>
             <div class="box-body">
 				<div class="row">
 					<div id="button_group_one" class="col-md-3 col-sm-6"></div>
@@ -135,11 +135,11 @@
 				 <td>nextval(&#39;otus.order_details_id_seq&#39;::regclass)</td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
+				  </table>
 				 </td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
+				  </table>
 				 </td>
 				 <td><p>surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store</p></td>
 				</tr>
@@ -152,7 +152,7 @@
 				 <td>null</td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
+				  </table>
 				 </td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
@@ -164,7 +164,7 @@
 						order_details_order_id_fkey <span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span>
 					</td>
 				   </tr>
-				  </table>					 
+				  </table>
 				 </td>
 				 <td><p>order identifier (FK)</p></td>
 				</tr>
@@ -177,7 +177,7 @@
 				 <td>null</td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
+				  </table>
 				 </td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
@@ -189,7 +189,7 @@
 						order_details_product_id_fkey <span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span>
 					</td>
 				   </tr>
-				  </table>					 
+				  </table>
 				 </td>
 				 <td><p>product identifier (FK)</p></td>
 				</tr>
@@ -202,30 +202,13 @@
 				 <td>null</td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
+				  </table>
 				 </td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
+				  </table>
 				 </td>
 				 <td><p>clarifications or wishes to the order; varchar is a variable-length character type with a chance to set a limit size of data</p></td>
-				</tr>
-				<tr>
-				 <td><span id="address">address</span></td>
-				 <td>varchar</td>
-				 <td>255</td>
-				 <td title=''></td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
-				 </td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
-				 </td>
-				 <td><p>delivery address; varchar is a variable-length character type with a chance to set a limit size of data</p></td>
 				</tr>
 				<tr>
 				 <td><span id="count">count</span></td>
@@ -236,11 +219,11 @@
 				 <td>1</td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
+				  </table>
 				 </td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
+				  </table>
 				 </td>
 				 <td><p>number of products; integer is the common choice for numeric type, as it offers the best balance between range, storage size, and performance</p></td>
 				</tr>
@@ -253,11 +236,11 @@
 				 <td>null</td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
+				  </table>
 				 </td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
+				  </table>
 				 </td>
 				 <td><p>final price after calculations for concrete client; numeric is especially recommended type for storing monetary amounts</p></td>
 				</tr>
@@ -270,11 +253,11 @@
 				 <td>now()</td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
+				  </table>
 				 </td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
+				  </table>
 				 </td>
 				 <td><p>creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared</p></td>
 				</tr>
@@ -287,20 +270,21 @@
 				 <td>null</td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
+				  </table>
 				 </td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
+				  </table>
 				 </td>
 				 <td><p>last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated</p></td>
 				</tr>
 								</tbody>
 				</table>
-				<p title='9 columns'>Table contained <span id="recordNumber">2</span> rows<p/>
+                <p title='8 columns'>Table contained <span id="recordNumber">2</span> rows
+                <p/>
 			</div>
 		</div>
-		<div class="box box-primary">		
+		<div class="box box-primary">
 			<div class="box-header with-border">
               <i class="fa fa-sitemap"></i>
 
@@ -311,7 +295,7 @@
                 </button>
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
               </div>
-            </div>	
+            </div>
 			<div class="box-body">
 				<table id="indexes_table" class="table table-bordered table-striped dataTable" role="grid">
 				<thead>
@@ -328,15 +312,15 @@
 				  <td>Primary key</td>
 				  <td><span title='Ascending'>Asc</span></td>
 				  <td>id</td>
-				 </tr>				 
+				 </tr>
 				 <tr>
 				  <td title='Indexed'>order_details_order_id_idx</td>
 				  <td>Performance</td>
 				  <td><span title='Ascending'>Asc</span></td>
 				  <td>order_id</td>
-				 </tr>				 
+				 </tr>
 				</tbody>
-				</table>   			  
+				</table>
 			</div><!-- /.box-body -->
 		</div>
 		<div class="alert alert-warning alert-dismissible">
@@ -344,9 +328,9 @@
 			<h4><i class="icon fa fa-warning"></i> Graphviz Needed!</h4>
 			<p>SchemaSpy was unable to generate a diagram of table relationships.</br>
 			SchemaSpy requires Graphviz graphvizVersion 2.26 or versions greater than 2.31 from <a href='http://www.graphviz.org' target='_blank'>www.graphviz.org</a>.</p>
-	    </div>                   	
+	    </div>
 	      </section>
-    
+
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">

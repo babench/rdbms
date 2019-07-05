@@ -39,11 +39,12 @@ BEGIN
     UPDATE otus.product set count = count - _order_product_count where id = _product_id;
 
     -- make a new order
-    INSERT INTO otus.order (owner_id, product_id, status, created_time, scheduled_time)
-    VALUES (_client_id, _product_id, 'not_paid', now(), now() + _schedule_interval) RETURNING id INTO _order_id;
+    INSERT INTO otus.order (owner_id, product_id, status, address, created_time, scheduled_time)
+    VALUES (_client_id, _product_id, 'not_paid', 'address', now(),
+            now() + _schedule_interval) RETURNING id INTO _order_id;
 
-    INSERT INTO otus.order_details (order_id, product_id, comment, address, count, total_price, created_time)
-    VALUES (_order_id, _product_id, 'comment', 'address', _order_product_count, _product_price, now());
+    INSERT INTO otus.order_details (order_id, product_id, comment, count, total_price, created_time)
+    VALUES (_order_id, _product_id, 'comment', _order_product_count, _product_price, now());
 
     INSERT INTO otus.order_log (order_id, modified_by, status, created_time)
     VALUES (_order_id, _client_id, 'not_paid', now());

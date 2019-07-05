@@ -31,7 +31,7 @@
   <link rel="stylesheet" href="bower/admin-lte/dist/css/skins/_all-skins.min.css">
   <!-- SchemaSpy -->
   <link rel="stylesheet" href="schemaSpy.css">
-  
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -59,7 +59,7 @@
 			<li><a href="columns.html" title="All of the columns in the schema">Columns</a></li>
 			<li><a href="constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
 			<li><a href="relationships.html" title="Diagram of table relationships">Relationships</a></li>
-			<li><a href="orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>				
+			<li><a href="orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
 			<li><a href="anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
 			<li><a href="routines.html" title="Procedures and functions">Routines</a></li>
           </ul>
@@ -84,7 +84,7 @@
 			<div class="box-header with-border">
 			  <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
               <h3 class="box-title">Columns</h3>
-            </div>	
+            </div>
             <div class="box-body">
 				<div class="row">
 					<div id="button_group_one" class="col-md-3 col-sm-6"></div>
@@ -141,13 +141,14 @@
 					<tr>
 					 <td>order_details</td>
 					 <td>Table</td>
-					 <td>count</td>
-					 <td>int4</td>
-					 <td>10</td>
+                        <td>total_price</td>
+                        <td>numeric</td>
+                        <td>14</td>
 					 <td title=''></td>
 					 <td title=''></td>
-					 <td>1</td>
-					 <td><p>number of products; integer is the common choice for numeric type, as it offers the best balance between range, storage size, and performance</p></td>
+                        <td>null</td>
+                        <td><p>final price after calculations for concrete client; numeric is especially recommended
+                            type for storing monetary amounts</p></td>
 					</tr>
 					<tr>
 					 <td>product_property</td>
@@ -163,13 +164,16 @@
 					<tr>
 					 <td>order</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>product_id</td>
-					 <td>int8</td>
-					 <td>19</td>
+                        <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120'
+                                                                     style='padding-right: 5px;'></i>status
+                        </td>
+                        <td>&quot;otus&quot;.&quot;order_status&quot;</td>
+                        <td>2147483647</td>
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>product identifier (FK)</p></td>
+                        <td><p>order status; enum type comprises a static and ordered set of values that helps to escape
+                            errors</p></td>
 					</tr>
 					<tr>
 					 <td>manufacturer</td>
@@ -227,26 +231,30 @@
 					 <td><p>common comment; varchar is a variable-length character type with a chance to set a limit size of data</p></td>
 					</tr>
 					<tr>
-					 <td>order_details</td>
+                        <td>order</td>
 					 <td>Table</td>
-					 <td>updated_time</td>
-					 <td>timestamptz</td>
-					 <td>35</td>
-					 <td title='nullable'>√</td>
+                        <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey'
+                                                                      style='padding-left: 5px;'></i>id
+                        </td>
+                        <td>bigserial</td>
+                        <td>19</td>
 					 <td title=''></td>
-					 <td>null</td>
-					 <td><p>last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated</p></td>
+                        <td title='Automatically updated by the database'>√</td>
+                        <td>nextval(&#39;otus.order_id_seq&#39;::regclass)</td>
+                        <td><p>surrogate identifier; auto sequence of the big integer is a good choice for a long time
+                            e-commerce store</p></td>
 					</tr>
 					<tr>
 					 <td>order_details</td>
 					 <td>Table</td>
-					 <td>total_price</td>
-					 <td>numeric</td>
-					 <td>14</td>
+                        <td>created_time</td>
+                        <td>timestamptz</td>
+                        <td>35</td>
 					 <td title=''></td>
 					 <td title=''></td>
-					 <td>null</td>
-					 <td><p>final price after calculations for concrete client; numeric is especially recommended type for storing monetary amounts</p></td>
+                        <td>now()</td>
+                        <td><p>creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when
+                            the data had appeared</p></td>
 					</tr>
 					<tr>
 					 <td>product</td>
@@ -504,13 +512,14 @@
 					<tr>
 					 <td>order_details</td>
 					 <td>Table</td>
-					 <td>created_time</td>
+                        <td>updated_time</td>
 					 <td>timestamptz</td>
 					 <td>35</td>
+                        <td title='nullable'>√</td>
 					 <td title=''></td>
-					 <td title=''></td>
-					 <td>now()</td>
-					 <td><p>creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared</p></td>
+                        <td>null</td>
+                        <td><p>last updated timestamp; it is a timestamp with a time zone defines an exact moment when
+                            the data had updated</p></td>
 					</tr>
 					<tr>
 					 <td>account</td>
@@ -570,13 +579,14 @@
 					<tr>
 					 <td>order</td>
 					 <td>Table</td>
-					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>status</td>
-					 <td>&quot;otus&quot;.&quot;order_status&quot;</td>
-					 <td>2147483647</td>
+                        <td>address</td>
+                        <td>varchar</td>
+                        <td>255</td>
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>order status; enum type comprises a static and ordered set of values that helps to escape errors</p></td>
+                        <td><p>delivery address; varchar is a variable-length character type with a chance to set a
+                            limit size of data</p></td>
 					</tr>
 					<tr>
 					 <td>order_log</td>
@@ -713,24 +723,27 @@
 					<tr>
 					 <td>order_details</td>
 					 <td>Table</td>
-					 <td>address</td>
-					 <td>varchar</td>
-					 <td>255</td>
+                        <td>count</td>
+                        <td>int4</td>
+                        <td>10</td>
 					 <td title=''></td>
 					 <td title=''></td>
-					 <td>null</td>
-					 <td><p>delivery address; varchar is a variable-length character type with a chance to set a limit size of data</p></td>
+                        <td>1</td>
+                        <td><p>number of products; integer is the common choice for numeric type, as it offers the best
+                            balance between range, storage size, and performance</p></td>
 					</tr>
 					<tr>
 					 <td>order</td>
 					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>bigserial</td>
+                        <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey'
+                                                                      style='padding-left: 5px;'></i>owner_id
+                        </td>
+                        <td>int8</td>
 					 <td>19</td>
 					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;otus.order_id_seq&#39;::regclass)</td>
-					 <td><p>surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store</p></td>
+                        <td title=''></td>
+                        <td>null</td>
+                        <td><p>client identifier id, owner of the order (FK)</p></td>
 					</tr>
 					<tr>
 					 <td>order_details</td>
@@ -790,13 +803,15 @@
 					<tr>
 					 <td>order</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>owner_id</td>
+                        <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey'
+                                                                      style='padding-left: 5px;'></i>product_id
+                        </td>
 					 <td>int8</td>
 					 <td>19</td>
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>client identifier id, owner of the order (FK)</p></td>
+                        <td><p>product identifier (FK)</p></td>
 					</tr>
 					<tr>
 					 <td>account</td>
@@ -810,15 +825,15 @@
 					 <td><p>middle name; varchar is a variable-length character type with a chance to set a limit size of data</p></td>
 					</tr>
 								</tbody>
-				</table>				
+				</table>
 			</div>
-		</div>	
+		</div>
       </section>
 	  <script>
           var config = {
 	          pagination: true
           }
-	  </script>    
+	  </script>
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">

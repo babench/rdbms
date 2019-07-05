@@ -186,7 +186,7 @@ get connection ---> [connection pool -> pull exists or create new] ---> execute 
 
 
 ---
-`Trigger` is a specification that the database should automatically execute a particular function whenever a certain type of operation is performed. 
+`Trigger` is a specification that the database should automatically execute a particular function whenever a certain type of operation is performed.
  - can be attached to tables, views, and foreign tables
  - can be execute before/after any `INSERT`, `UPDATE`, or `DELETE` operation
  - can be execute instead of `INSERT`, `UPDATE`, or `DELETE` operations (no in MySQL)
@@ -219,4 +219,4 @@ Links:
  - https://www.postgresql.org/docs/11/sql-createindex.html
  - https://www.postgresql.org/docs/11/ddl-constraints.html
  - https://www.postgresql.org/docs/11/trigger-definition.html
- - https://habr.com/ru/post/141767/ 
+ - https://habr.com/ru/post/141767/
