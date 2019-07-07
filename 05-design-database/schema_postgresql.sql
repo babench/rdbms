@@ -1,4 +1,4 @@
--- DDL: use PostgreSQL
+-- DDL: use PostgreSQL 9.1+
 
 CREATE SCHEMA IF NOT EXISTS otus;
 
