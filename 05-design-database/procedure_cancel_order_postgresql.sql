@@ -18,7 +18,7 @@ BEGIN
     into _selected_order_id, _scheduled_time
     from otus.order as r
     where r.id = _order_id
-      and status not in ('canceled', 'delivered', 'lost', 'returned') FOR UPDATE;
+      and status in ('not_paid', 'paid', 'packed', 'shipped') FOR UPDATE;
     IF (_selected_order_id IS NULL OR _selected_order_id = 0) THEN
         RAISE EXCEPTION 'order id % not found in states: not_paid, paid, packed, shipped', _order_id;
     END IF;
