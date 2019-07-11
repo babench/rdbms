@@ -51,7 +51,8 @@ BEGIN
     VALUES (_client_id, _product_id, 'not_paid', 'address', _created_time, _scheduled_time) RETURNING id INTO _order_id;
 
     INSERT INTO otus.order_details (order_id, product_id, comment, count, total_price, created_time)
-    VALUES (_order_id, _product_id, 'comment', _order_product_count, _product_price, _created_time);
+    VALUES (_order_id, _product_id, 'comment', _order_product_count, (_product_price * _order_product_count),
+            _created_time);
 
     INSERT INTO otus.order_log (order_id, modified_by, status, created_time, scheduled_time)
     VALUES (_order_id, _client_id, 'not_paid', _created_time, _scheduled_time);

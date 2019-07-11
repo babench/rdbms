@@ -11,7 +11,9 @@ services:
     volumes:
       - ./schema_postgresql.sql:/docker-entrypoint-initdb.d/1-schema.sql
       - ./data_postgresql.sql:/docker-entrypoint-initdb.d/2-data.sql
-      - ./procedure_next_order_postgresql.sql:/docker-entrypoint-initdb.d/3-procedure_next_order.sql
-      - ./procedure_cancel_order_postgresql.sql:/docker-entrypoint-initdb.d/4-procedure_cancel_order.sql
+      - ./tasks/procedure_next_order_postgresql.sql:/docker-entrypoint-initdb.d/3-procedure_next_order.sql
+      - ./tasks/procedure_cancel_order_postgresql.sql:/docker-entrypoint-initdb.d/4-procedure_cancel_order.sql
+      - ./tasks/procedure_return_order_postgresql.sql:/docker-entrypoint-initdb.d/5-procedure_return_order.sql
+      - ./tasks/procedure_change_order_state_postgresql.sql:/docker-entrypoint-initdb.d/6-procedure_change_order_state.sql
     ports:
       - "5432:5432"

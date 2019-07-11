@@ -5,6 +5,7 @@ $$
 DECLARE
     _order_id ALIAS FOR $1;
     _modified_by ALIAS FOR $2;
+    _canceled_status   otus.order_status := 'canceled';
     _selected_order_id BIGINT;
     _product_count     INT;
     _product_id        BIGINT;
@@ -26,15 +27,16 @@ BEGIN
     -- return product(s)
     select od.count, od.product_id
     into _product_count, _product_id
-    from otus.order_details as od;
+    from otus.order_details as od
+    where od.order_id = _order_id;
     update otus.product set count = (count + _product_count), updated_time = _now where id = _product_id;
 
     -- cancel order
-    update otus.order set status = 'canceled', updated_time = _now where id = _order_id;
+    update otus.order set status = _canceled_status, updated_time = _now where id = _selected_order_id;
 
     -- log about canceled order
     INSERT INTO otus.order_log (order_id, modified_by, status, created_time, scheduled_time)
-    VALUES (_order_id, _modified_by, 'canceled', _now, _scheduled_time);
+    VALUES (_selected_order_id, _modified_by, _canceled_status, _now, _scheduled_time);
 
     COMMIT;
     RAISE NOTICE 'order id % canceled', _selected_order_id;
