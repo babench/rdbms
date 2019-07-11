@@ -30,6 +30,8 @@ INSERT INTO otus.product_property (product_id, property_name, property_desc, com
 VALUES (1, 'property 2', 'property description product 1', 'comment');
 INSERT INTO otus.product_price (product_id, supplier_id, manufacturer_id, price)
 VALUES (1, 1, 1, 110.0);
+INSERT INTO otus.product_price_log (product_price_id, price, modified_by)
+VALUES (1, 110.0, 1);
 
 -- product 2 + properties + price
 INSERT INTO otus.product (id, tag, manufacturer_id, supplier_id, description, count, deleted)
@@ -40,3 +42,5 @@ INSERT INTO otus.product_property (product_id, property_name, property_desc, com
 VALUES (2, 'property 2', 'property description product 2', 'comment');
 INSERT INTO otus.product_price (product_id, supplier_id, manufacturer_id, price)
 VALUES (2, 1, 1, 55.0);
+INSERT INTO otus.product_price_log (product_price_id, price, modified_by)
+VALUES (2, 55.0, 1);

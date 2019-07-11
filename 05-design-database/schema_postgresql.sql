@@ -60,6 +60,44 @@ COMMENT ON INDEX otus.supplier_tag_idx IS 'tag is metadata for searching by supp
 
 
 /**
+  Table: account
+ */
+CREATE TABLE IF NOT EXISTS otus.account
+(
+    id           BIGSERIAL PRIMARY KEY,
+    pwd_hash     VARCHAR(255)      NOT NULL,
+    email        VARCHAR(50)       NOT NULL,
+    phone        VARCHAR(15),
+    type         otus.account_type NOT NULL,
+    first_name   VARCHAR(100),
+    middle_name  VARCHAR(100),
+    surname      VARCHAR(100),
+    deleted      BOOLEAN           NOT NULL DEFAULT false,
+    created_time TIMESTAMPTZ       NOT NULL DEFAULT now(),
+    updated_time TIMESTAMPTZ,
+    birthdate    DATE
+);
+COMMENT ON TABLE otus.account IS 'e-commerce store accounts';
+COMMENT ON COLUMN otus.account.id IS 'surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store';
+COMMENT ON COLUMN otus.account.pwd_hash IS 'hash of account password; varchar is a variable-length character type with a chance to set a limit size of data';
+COMMENT ON COLUMN otus.account.email IS 'account''s e-mail aka permanent login field; varchar is a variable-length character type with a chance to set a limit size of data';
+COMMENT ON COLUMN otus.account.phone IS 'account''s phone number; varchar is a variable-length character type with a chance to set a limit size of data';
+COMMENT ON COLUMN otus.account.type IS 'account type; enum type comprises a static and ordered set of values that helps to escape errors';
+COMMENT ON COLUMN otus.account.first_name IS 'first name; varchar is a variable-length character type with a chance to set a limit size of data';
+COMMENT ON COLUMN otus.account.middle_name IS 'middle name; varchar is a variable-length character type with a chance to set a limit size of data';
+COMMENT ON COLUMN otus.account.surname IS 'surname; varchar is a variable-length character type with a chance to set a limit size of data';
+COMMENT ON COLUMN otus.account.deleted IS 'account accessibility flag; true and false are the possible values';
+COMMENT ON COLUMN otus.account.created_time IS 'creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared';
+COMMENT ON COLUMN otus.account.updated_time IS 'last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated';
+COMMENT ON COLUMN otus.account.birthdate IS 'account birthdate; only date in the year';
+
+CREATE UNIQUE INDEX IF NOT EXISTS account_email_idx ON otus.account (email);
+CREATE INDEX IF NOT EXISTS account_deleted_type_idx ON otus.account (deleted, type) where deleted = false;
+COMMENT ON INDEX otus.account_email_idx IS 'e-mail should be unique for all accounts; this is user login';
+COMMENT ON INDEX otus.account_deleted_type_idx IS 'search among available accounts';
+
+
+/**
   Table: product
  */
 CREATE TABLE IF NOT EXISTS otus.product
@@ -128,8 +166,9 @@ CREATE TABLE IF NOT EXISTS otus.product_price
     price           NUMERIC(14, 2) NOT NULL CHECK (price > 0),
     product_id      BIGINT         NOT NULL REFERENCES otus.product (id),
     supplier_id     BIGINT         NOT NULL REFERENCES otus.supplier (id),
-    manufacturer_id BIGINT         NOT NULL REFERENCES otus.manufacturer (id)
-
+    manufacturer_id BIGINT         NOT NULL REFERENCES otus.manufacturer (id),
+    created_time    TIMESTAMPTZ    NOT NULL DEFAULT now(),
+    updated_time    TIMESTAMPTZ
 );
 COMMENT ON TABLE otus.product_price IS 'product prices depend on manufacturers and suppliers';
 COMMENT ON COLUMN otus.product_price.id IS 'surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store';
@@ -137,6 +176,8 @@ COMMENT ON COLUMN otus.product_price.price IS 'product cost; numeric is especial
 COMMENT ON COLUMN otus.product_price.product_id IS 'product identifier (FK)';
 COMMENT ON COLUMN otus.product_price.supplier_id IS 'supplier identifier (FK)';
 COMMENT ON COLUMN otus.product_price.manufacturer_id IS 'manufacturer identifier (FK)';
+COMMENT ON COLUMN otus.product_price.created_time IS 'creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared';
+COMMENT ON COLUMN otus.product_price.updated_time IS 'last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated';
 
 CREATE INDEX IF NOT EXISTS product_price_price_idx ON otus.product_price (price);
 CREATE INDEX IF NOT EXISTS product_price_product_id_idx ON otus.product_price (product_id);
@@ -145,41 +186,25 @@ COMMENT ON INDEX otus.product_price_product_id_idx IS 'get product price';
 
 
 /**
-  Table: account
+  Table: product_price_log
  */
-CREATE TABLE IF NOT EXISTS otus.account
+CREATE TABLE IF NOT EXISTS otus.product_price_log
 (
-    id           BIGSERIAL PRIMARY KEY,
-    pwd_hash     VARCHAR(255)      NOT NULL,
-    email        VARCHAR(50)       NOT NULL,
-    phone        VARCHAR(15),
-    type         otus.account_type NOT NULL,
-    first_name   VARCHAR(100),
-    middle_name  VARCHAR(100),
-    surname      VARCHAR(100),
-    deleted      BOOLEAN           NOT NULL DEFAULT false,
-    created_time TIMESTAMPTZ       NOT NULL DEFAULT now(),
-    updated_time TIMESTAMPTZ,
-    birthdate    DATE
+    id               BIGSERIAL PRIMARY KEY,
+    product_price_id BIGINT         NOT NULL REFERENCES otus.product_price (id),
+    price            NUMERIC(14, 2) NOT NULL,
+    modified_by      BIGINT         NOT NULL REFERENCES otus.account (id),
+    created_time     TIMESTAMPTZ    NOT NULL DEFAULT now()
 );
-COMMENT ON TABLE otus.account IS 'e-commerce store accounts';
-COMMENT ON COLUMN otus.account.id IS 'surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store';
-COMMENT ON COLUMN otus.account.pwd_hash IS 'hash of account password; varchar is a variable-length character type with a chance to set a limit size of data';
-COMMENT ON COLUMN otus.account.email IS 'account''s e-mail aka permanent login field; varchar is a variable-length character type with a chance to set a limit size of data';
-COMMENT ON COLUMN otus.account.phone IS 'account''s phone number; varchar is a variable-length character type with a chance to set a limit size of data';
-COMMENT ON COLUMN otus.account.type IS 'account type; enum type comprises a static and ordered set of values that helps to escape errors';
-COMMENT ON COLUMN otus.account.first_name IS 'first name; varchar is a variable-length character type with a chance to set a limit size of data';
-COMMENT ON COLUMN otus.account.middle_name IS 'middle name; varchar is a variable-length character type with a chance to set a limit size of data';
-COMMENT ON COLUMN otus.account.surname IS 'surname; varchar is a variable-length character type with a chance to set a limit size of data';
-COMMENT ON COLUMN otus.account.deleted IS 'account accessibility flag; true and false are the possible values';
-COMMENT ON COLUMN otus.account.created_time IS 'creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared';
-COMMENT ON COLUMN otus.account.updated_time IS 'last updated timestamp; it is a timestamp with a time zone defines an exact moment when the data had updated';
-COMMENT ON COLUMN otus.account.birthdate IS 'account birthdate; only date in the year';
+COMMENT ON TABLE otus.product_price_log IS 'product price changelog';
+COMMENT ON COLUMN otus.product_price_log.id IS 'surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store';
+COMMENT ON COLUMN otus.product_price_log.product_price_id IS 'product price identifier (FK)';
+COMMENT ON COLUMN otus.product_price_log.price IS 'product cost; numeric is especially recommended type for storing monetary amounts';
+COMMENT ON COLUMN otus.product_price_log.modified_by IS 'account identifier changed the product price (FK)';
+COMMENT ON COLUMN otus.product_price_log.created_time IS 'creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared';
 
-CREATE UNIQUE INDEX IF NOT EXISTS account_email_idx ON otus.account (email);
-CREATE INDEX IF NOT EXISTS account_deleted_type_idx ON otus.account (deleted, type) where deleted = false;
-COMMENT ON INDEX otus.account_email_idx IS 'e-mail should be unique for all accounts; this is user login';
-COMMENT ON INDEX otus.account_deleted_type_idx IS 'search among available accounts';
+CREATE INDEX IF NOT EXISTS product_price_log_product_price_id_price_idx ON otus.product_price_log (product_price_id, price);
+COMMENT ON INDEX otus.product_price_log_product_price_id_price_idx IS 'select log records for the product prices by id and price range';
 
 
 /**
