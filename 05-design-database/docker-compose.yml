@@ -14,6 +14,7 @@ services:
       - ./tasks/procedure_next_order_postgresql.sql:/docker-entrypoint-initdb.d/3-procedure_next_order.sql
       - ./tasks/procedure_cancel_order_postgresql.sql:/docker-entrypoint-initdb.d/4-procedure_cancel_order.sql
       - ./tasks/procedure_return_order_postgresql.sql:/docker-entrypoint-initdb.d/5-procedure_return_order.sql
-      - ./tasks/procedure_change_order_state_postgresql.sql:/docker-entrypoint-initdb.d/6-procedure_change_order_state.sql
+      - ./tasks/procedure_change_order_status_postgresql.sql:/docker-entrypoint-initdb.d/6-procedure_change_order_status.sql
+      - ./tasks/procedure_change_product_price_postgresql.sql:/docker-entrypoint-initdb.d/7-change_product_price.sql
     ports:
       - "5432:5432"

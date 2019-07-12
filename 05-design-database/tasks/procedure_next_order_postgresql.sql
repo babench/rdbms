@@ -33,7 +33,7 @@ BEGIN
         RAISE EXCEPTION 'price for product % not found', _product_id;
     END IF;
 
-    -- select account id of client
+    -- select client account id
     _client_id := (select a.id
                    from otus.account as a
                    where a.email = _client_email

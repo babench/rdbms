@@ -1,6 +1,6 @@
 -- procedure with transaction: use PostgreSQL 11+
 
-CREATE OR REPLACE PROCEDURE change_store_order(BIGINT, BIGINT, otus.order_status) AS
+CREATE OR REPLACE PROCEDURE change_store_order_status(BIGINT, BIGINT, otus.order_status) AS
 $$
 DECLARE
     _order_id ALIAS FOR $1;
