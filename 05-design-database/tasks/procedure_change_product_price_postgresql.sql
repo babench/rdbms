@@ -19,32 +19,33 @@ BEGIN
     END IF;
 
     -- select manager account id
-    _client_id := (select a.id
-                   from otus.account as a
-                   where a.email = _client_email
-                     and a.type = 'manager'
-                     and a.deleted = false);
+    _client_id := (SELECT a.id
+                   FROM otus.account as a
+                   WHERE a.email = _client_email
+                     AND a.type = 'manager'
+                     AND a.deleted = false);
     IF (_client_id IS NULL OR _client_id = 0) THEN
         RAISE EXCEPTION 'available manager account % not found', _client_email;
     END IF;
 
     -- select product id
-    _product_id := (select p.id
-                    from otus.product as p
-                    where p.description = _product_name);
+    _product_id := (SELECT p.id
+                    FROM otus.product as p
+                    WHERE p.description = _product_name);
     IF (_product_id IS NULL OR _product_id = 0) THEN
         RAISE EXCEPTION 'product % not found', _product_name;
     END IF;
 
-    -- select and update product price id
-    _product_price_id := (select pp.id
-                          from otus.product_price as pp
-                          where pp.product_id = _product_id FOR UPDATE);
+    -- select product price id
+    _product_price_id := (SELECT pp.id
+                          FROM otus.product_price as pp
+                          WHERE pp.product_id = _product_id FOR UPDATE);
     IF (_product_price_id IS NULL OR _product_price_id = 0) THEN
         RAISE EXCEPTION 'price for product % not found', _product_name;
     END IF;
 
-    UPDATE otus.product_price SET price = _next_product_price, updated_time = _now where id = _product_price_id;
+    -- update product price
+    UPDATE otus.product_price SET price = _next_product_price, updated_time = _now WHERE id = _product_price_id;
 
     -- log about product price
     INSERT INTO otus.product_price_log (product_price_id, price, modified_by, created_time)

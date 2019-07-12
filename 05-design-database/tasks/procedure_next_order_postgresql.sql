@@ -28,23 +28,23 @@ BEGIN
     END IF;
 
     -- select product price
-    _product_price := (select p.price from otus.product_price as p where p.product_id = _product_id);
+    _product_price := (SELECT p.price FROM otus.product_price as p WHERE p.product_id = _product_id);
     IF (_product_price IS NULL OR _product_price = 0.0) THEN
         RAISE EXCEPTION 'price for product % not found', _product_id;
     END IF;
 
     -- select client account id
-    _client_id := (select a.id
-                   from otus.account as a
-                   where a.email = _client_email
-                     and a.type = 'client'
-                     and a.deleted = false);
+    _client_id := (SELECT a.id
+                   FROM otus.account AS a
+                   WHERE a.email = _client_email
+                     AND a.type = 'client'
+                     AND a.deleted = false);
     IF (_client_id IS NULL OR _client_id = 0) THEN
         RAISE EXCEPTION 'available client account % not found', _client_email;
     END IF;
 
     -- book products
-    UPDATE otus.product set count = (count - _order_product_count), updated_time = _created_time where id = _product_id;
+    UPDATE otus.product SET count = (count - _order_product_count), updated_time = _created_time WHERE id = _product_id;
 
     -- make a new order
     INSERT INTO otus.order (owner_id, product_id, status, address, created_time, scheduled_time)
@@ -58,11 +58,11 @@ BEGIN
     VALUES (_order_id, _client_id, 'not_paid', _created_time, _scheduled_time);
 
     -- test not paid orders
-    _not_paid_orders := (select count(1)
-                         from otus.order as o
-                         where o.owner_id = _client_id
-                           and o.product_id = _product_id
-                           and o.status = 'not_paid');
+    _not_paid_orders := (SELECT count(1)
+                         FROM otus.order AS o
+                         WHERE o.owner_id = _client_id
+                           AND o.product_id = _product_id
+                           AND o.status = 'not_paid');
 
     IF (_not_paid_orders > 1) THEN
         ROLLBACK;
