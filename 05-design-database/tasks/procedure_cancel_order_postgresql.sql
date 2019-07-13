@@ -11,12 +11,13 @@ DECLARE
     _product_id        BIGINT;
     _scheduled_time    TIMESTAMPTZ;
     _now               TIMESTAMPTZ;
+    _delivered_time    TIMESTAMPTZ;
 BEGIN
     _now := now();
 
     -- select order
-    SELECT r.id, r.scheduled_time
-    INTO _selected_order_id, _scheduled_time
+    SELECT r.id, r.scheduled_time, r.delivered_time
+    INTO _selected_order_id, _scheduled_time, _delivered_time
     FROM otus.order as r
     WHERE r.id = _order_id
       AND status IN ('not_paid', 'paid', 'packed', 'shipped') FOR UPDATE;
@@ -35,8 +36,8 @@ BEGIN
     UPDATE otus.order SET status = _canceled_status, updated_time = _now WHERE id = _selected_order_id;
 
     -- log about canceled order
-    INSERT INTO otus.order_log (order_id, modified_by, status, created_time, scheduled_time)
-    VALUES (_selected_order_id, _modified_by, _canceled_status, _now, _scheduled_time);
+    INSERT INTO otus.order_log (order_id, modified_by, status, created_time, scheduled_time, delivered_time)
+    VALUES (_selected_order_id, _modified_by, _canceled_status, _now, _scheduled_time, _delivered_time);
 
     COMMIT;
     RAISE NOTICE 'order id % canceled', _selected_order_id;

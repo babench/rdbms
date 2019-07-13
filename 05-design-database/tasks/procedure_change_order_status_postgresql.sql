@@ -88,6 +88,10 @@ BEGIN
         END CASE;
 
     IF (_need_change_state = TRUE) THEN
+        -- set delivered time
+        IF (_next_state = 'delivered') THEN
+            _delivered_time = _now;
+        END IF;
         -- change order state
         UPDATE otus.order SET status = _next_state, updated_time = _now WHERE id = _selected_order_id;
         -- log about changing status
@@ -97,5 +101,5 @@ BEGIN
 
     COMMIT;
     RAISE NOTICE 'order id %', _order_id || ' moved from ' || _selected_status || ' to ' || _next_state;
-END;
+END ;
 $$ LANGUAGE plpgsql;
