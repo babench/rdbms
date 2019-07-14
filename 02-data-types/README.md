@@ -115,8 +115,7 @@ SQL defines standards of:
 
 
 ---
-
-
  - Surrogate key (system-generated key) - a unique identifier for the entity object in the database that has no relationship to the real-world meaning of the data held in a row
  - Natural key (business key) - is a type of unique key that is formed of attributes have a logical relationship to the attributes within that row
-
+ - Use BIGINT(64 bit) for surrogate primary identifier for production databases
+ - Use INT(32 bit) for surrogate primary identifier if you're only sure that it will be enough
