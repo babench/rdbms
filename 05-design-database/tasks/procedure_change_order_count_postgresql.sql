@@ -47,7 +47,8 @@ BEGIN
     -- check current and next amount of product in order
     _delta_count := _next_order_count - _old_order_count;
     IF (_delta_count = 0) THEN
-        RAISE EXCEPTION '%', 'change next product count: ' || _next_order_count || ' in order: ' || _selected_order_id;
+        RAISE EXCEPTION '%', 'the same product count: ' || _next_order_count ||
+                             ' in order: ' || _selected_order_id || ' ; choose another count';
     END IF;
 
     -- select product price

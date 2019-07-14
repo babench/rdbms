@@ -248,7 +248,7 @@ CREATE TABLE IF NOT EXISTS otus.order_details
     order_id     BIGINT         NOT NULL REFERENCES otus.order (id),
     product_id   BIGINT         NOT NULL REFERENCES otus.product (id),
     comment      VARCHAR(1024),
-    count        INT            NOT NULL DEFAULT 1 CHECK (count > 0),
+    count        INT            NOT NULL DEFAULT 1 CHECK (count >= 0),
     total_price  NUMERIC(14, 2) NOT NULL,
     created_time TIMESTAMPTZ    NOT NULL DEFAULT now(),
     updated_time TIMESTAMPTZ
@@ -275,7 +275,7 @@ CREATE TABLE IF NOT EXISTS otus.order_log
     id             BIGSERIAL PRIMARY KEY,
     order_id       BIGINT            NOT NULL REFERENCES otus.order (id),
     modified_by    BIGINT            NOT NULL REFERENCES otus.account (id),
-    count          INT               NOT NULL,
+    count          INT               NOT NULL CHECK (count >= 0),
     status         otus.order_status NOT NULL,
     created_time   TIMESTAMPTZ       NOT NULL DEFAULT now(),
     scheduled_time TIMESTAMPTZ       NOT NULL,

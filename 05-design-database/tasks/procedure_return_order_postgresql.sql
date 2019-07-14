@@ -8,6 +8,8 @@ DECLARE
     _returned_status      otus.order_status := 'returned';
     _selected_order_id    BIGINT;
     _selected_order_count INT;
+    _next_order_count     INT               = 0;
+    _next_order_price     NUMERIC(14, 2)    = 0.0;
     _product_id           BIGINT;
     _scheduled_time       TIMESTAMPTZ;
     _delivered_time       TIMESTAMPTZ;
@@ -29,15 +31,19 @@ BEGIN
     SELECT od.count, od.product_id
     INTO _selected_order_count, _product_id
     FROM otus.order_details AS od
-    WHERE od.order_id = _order_id;
+    WHERE od.order_id = _order_id FOR UPDATE;
     UPDATE otus.product SET count = (count + _selected_order_count), updated_time = _now WHERE id = _product_id;
 
     -- return order
     UPDATE otus.order SET status = _returned_status, updated_time = _now WHERE id = _selected_order_id;
+    UPDATE otus.order_details
+    SET count       = _next_order_count,
+        total_price = _next_order_price
+    where order_id = _selected_order_id;
 
-    -- log about canceled order
+    -- log about returned order
     INSERT INTO otus.order_log (order_id, modified_by, count, status, created_time, scheduled_time, delivered_time)
-    VALUES (_selected_order_id, _modified_by, _selected_order_count, _returned_status, _now, _scheduled_time,
+    VALUES (_selected_order_id, _modified_by, _next_order_count, _returned_status, _now, _scheduled_time,
             _delivered_time);
 
     COMMIT;

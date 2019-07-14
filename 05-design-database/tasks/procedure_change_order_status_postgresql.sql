@@ -6,7 +6,7 @@ DECLARE
     _order_id ALIAS FOR $1;
     _modified_by ALIAS FOR $2;
     _next_state ALIAS FOR $3;
-    _selected_status      VARCHAR(8);
+    _selected_status      otus.order_status;
     _selected_order_id    BIGINT;
     _selected_order_count INT;
     _scheduled_time       TIMESTAMPTZ;
@@ -101,8 +101,14 @@ BEGIN
         IF (_next_state = 'delivered') THEN
             _delivered_time = _now;
         END IF;
+
         -- change order state
-        UPDATE otus.order SET status = _next_state, updated_time = _now WHERE id = _selected_order_id;
+        UPDATE otus.order
+        SET status         = _next_state,
+            updated_time   = _now,
+            delivered_time = _delivered_time
+        WHERE id = _selected_order_id;
+
         -- log about changing status
         INSERT INTO otus.order_log (order_id, modified_by, count, status, created_time, scheduled_time, delivered_time)
         VALUES (_selected_order_id, _modified_by, _selected_order_count, _next_state, _now, _scheduled_time,
