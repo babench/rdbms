@@ -83,8 +83,8 @@ BEGIN
     WHERE id = _selected_product_id;
 
     -- log about changing product count in the order
-    INSERT INTO otus.order_log (order_id, modified_by, status, created_time, scheduled_time, delivered_time)
-    VALUES (_selected_order_id, _modified_by, _not_paid_status, _now, _selected_scheduled_time,
+    INSERT INTO otus.order_log (order_id, modified_by, count, status, created_time, scheduled_time, delivered_time)
+    VALUES (_selected_order_id, _modified_by, _next_order_count, _not_paid_status, _now, _selected_scheduled_time,
             _selected_delivered_time);
 
     COMMIT;

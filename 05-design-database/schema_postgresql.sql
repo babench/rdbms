@@ -275,6 +275,7 @@ CREATE TABLE IF NOT EXISTS otus.order_log
     id             BIGSERIAL PRIMARY KEY,
     order_id       BIGINT            NOT NULL REFERENCES otus.order (id),
     modified_by    BIGINT            NOT NULL REFERENCES otus.account (id),
+    count          INT               NOT NULL,
     status         otus.order_status NOT NULL,
     created_time   TIMESTAMPTZ       NOT NULL DEFAULT now(),
     scheduled_time TIMESTAMPTZ       NOT NULL,
@@ -284,6 +285,7 @@ COMMENT ON TABLE otus.order_log IS 'orders changelog';
 COMMENT ON COLUMN otus.order_log.id IS 'surrogate identifier; auto sequence of the big integer is a good choice for a long time e-commerce store';
 COMMENT ON COLUMN otus.order_log.order_id IS 'oder identifier (FK)';
 COMMENT ON COLUMN otus.order_log.modified_by IS 'account identifier changed the order status (FK)';
+COMMENT ON COLUMN otus.order_log.count IS 'number of products; integer is the common choice for numeric type, as it offers the best balance between range, storage size, and performance';
 COMMENT ON COLUMN otus.order_log.status IS 'order status; enum type comprises a static and ordered set of values that helps to escape errors';
 COMMENT ON COLUMN otus.order_log.created_time IS 'creation timestamp in DB; it is a timestamp with a time zone defines an exact moment when the data had appeared';
 COMMENT ON COLUMN otus.order_log.scheduled_time IS 'scheduled delivery date and time; helps to define a date and time in a concrete time zone';

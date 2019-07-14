@@ -54,8 +54,8 @@ BEGIN
     VALUES (_order_id, _product_id, 'comment', _order_product_count, (_product_price * _order_product_count),
             _created_time);
 
-    INSERT INTO otus.order_log (order_id, modified_by, status, created_time, scheduled_time)
-    VALUES (_order_id, _client_id, 'not_paid', _created_time, _scheduled_time);
+    INSERT INTO otus.order_log (order_id, modified_by, count, status, created_time, scheduled_time)
+    VALUES (_order_id, _client_id, _order_product_count, 'not_paid', _created_time, _scheduled_time);
 
     -- test not paid orders
     _not_paid_orders := (SELECT count(1)
