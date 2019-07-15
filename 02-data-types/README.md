@@ -35,36 +35,36 @@ Removing network 02-data-types_default
 
 ## Documentation
 
-SQL-86 - 1st standard adopted ANSI in 1986 and approved ISO in 1987 (ISO/IEC 9075:1986)
+`SQL-86` - 1st standard adopted ANSI in 1986 and approved ISO in 1987 (ISO/IEC 9075:1986)
 
-SQL-89 - revised standard SQL-86 (ISO/IEC 9075:1989)
+`SQL-89` - revised standard SQL-86 (ISO/IEC 9075:1989)
 
-SQL-92 - 2nd standard, the most advertised version of SQL (ISO/IEC 9075:1992 and get FIPS 127-2)
+`SQL-92` - 2nd standard, the most advertised version of SQL (ISO/IEC 9075:1992 and get FIPS 127-2)
 
-SQL:1999 - 3rd standard: regexp, recursive selects, triggers, procedures, non-scalar and objects data types (ISO/IEC 9075:1999)
+`SQL:1999` - 3rd standard: regexp, recursive selects, triggers, procedures, non-scalar and objects data types (ISO/IEC 9075:1999)
 
-SQL:2003 - 4th revision of the SQL and clarifications for SQL-1999: window functions, sequence generators, support XML (ISO/IEC 9075:2003)
+`SQL:2003` - 4th revision of the SQL and clarifications for SQL-1999: window functions, sequence generators, support XML (ISO/IEC 9075:2003)
 
-SQL:2006 - 5th revision of the SQL (ISO/IEC 9075:2006)
+`SQL:2006` - 5th revision of the SQL (ISO/IEC 9075:2006)
 
-SQL:2008 - 6th revision of the SQL (ISO/IEC 9075:2008)
+`SQL:2008` - 6th revision of the SQL (ISO/IEC 9075:2008)
 
-SQL:2011 - 7th revision of the SQL (ISO/IEC 9075:2011)
+`SQL:2011` - 7th revision of the SQL (ISO/IEC 9075:2011)
 
-SQL:2016 - 8th revision of the SQL (ISO/IEC 9075:2016)
+`SQL:2016` - 8th revision of the SQL (ISO/IEC 9075:2016)
 
 ---
 
 
-ANSI/ISO SQL doesn't have an Enum data type
+`ANSI/ISO SQL` doesn't have an `Enum` data type
  - MySQL and PostgreSQL have own implementations of Enum data type
  - other vendors offer other workarounds without native implementations
 
-NULL is a special marker used to indicate that a data value doesn't exist
- - Edgar F. Codd introduced that NULL is a requirement for all true RDBMS
- - NULL is a reserved word used to identify this marker
- - NULL has been the focus of controversy because it is not a value like True or False it is a third logical result (unknown)
- - later, Edgar F. Codd had proposals to replaced NULL by two separate Null-type markers to indicate the reason why data is missing: 'A-Values' = 'Missing But Applicable' and  'I-Values' = 'Missing But Inapplicable', respectively
+`NULL` is a special marker used to indicate that a data value doesn't exist
+ - Edgar F. Codd introduced that `NULL` is a requirement for all true RDBMS
+ - `NULL` is a reserved word used to identify this marker
+ - `NULL` has been the focus of controversy because it is not a value like `True` or `False` it is a third logical result (unknown)
+ - later, Edgar F. Codd had proposals to replaced `NULL` by two separate Null-type markers to indicate the reason why data is missing: 'A-Values' = 'Missing But Applicable' and  'I-Values' = 'Missing But Inapplicable', respectively
 
 
 ---
@@ -117,5 +117,5 @@ SQL defines standards of:
 ---
  - Surrogate key (system-generated key) - a unique identifier for the entity object in the database that has no relationship to the real-world meaning of the data held in a row
  - Natural key (business key) - is a type of unique key that is formed of attributes have a logical relationship to the attributes within that row
- - Use BIGINT(64 bit) for surrogate primary identifier for production databases
- - Use INT(32 bit) for surrogate primary identifier if you're only sure that it will be enough
+ - Use `bigint`(64 bit) for surrogate primary identifier for production databases
+ - Use `int`(32 bit) for surrogate primary identifier if you're only sure that it will be enough
