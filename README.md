@@ -16,5 +16,5 @@ Describe one business transaction consists of several steps
 ## Homework 4: [RDBMS components](https://github.com/DmitriySh/rdbms-course/tree/master/04-rdbms-components)
 Add indexes and constraints
 
-## Homework 5: [Design the database](https://github.com/DmitriySh/rdbms-course/tree/feature/05-design-database/05-design-database)
+## Homework 5: [Design the database](https://github.com/DmitriySh/rdbms-course/tree/master/05-design-database)
 Add business tasks and edit schema
