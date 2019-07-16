@@ -1,0 +1,21 @@
+version: '3.1'
+
+services:
+  database:
+    container_name: otus-database
+    image: postgres:11.4-alpine
+    environment:
+      POSTGRES_DB: store
+      POSTGRES_USER: store_user
+      POSTGRES_PASSWORD: owner
+    volumes:
+      - ./schema_postgresql.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - ./data_postgresql.sql:/docker-entrypoint-initdb.d/2-data.sql
+      - ./tasks/procedure_next_order_postgresql.sql:/docker-entrypoint-initdb.d/3-procedure_next_order.sql
+      - ./tasks/procedure_cancel_order_postgresql.sql:/docker-entrypoint-initdb.d/4-procedure_cancel_order.sql
+      - ./tasks/procedure_return_order_postgresql.sql:/docker-entrypoint-initdb.d/5-procedure_return_order.sql
+      - ./tasks/procedure_change_order_status_postgresql.sql:/docker-entrypoint-initdb.d/6-procedure_change_order_status.sql
+      - ./tasks/procedure_change_product_price_postgresql.sql:/docker-entrypoint-initdb.d/7-change_product_price.sql
+      - ./tasks/procedure_change_order_count_postgresql.sql:/docker-entrypoint-initdb.d/8-change_order_count.sql
+    ports:
+      - "5432:5432"

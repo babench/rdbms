@@ -65,7 +65,7 @@ Database Server consist of:
 
 ---
 
-Relation - is a two-dimensional table structure definition (in mathematics) with the data appearing in that structure
+`Relation` - is a two-dimensional table structure definition (in mathematics) with the data appearing in that structure
 Relational algebra based on:
  - set theory (set union, set difference, and Cartesian product) with additional constraints to these operators
  - a set of operators uses relations as arguments and returns relations as value
@@ -121,18 +121,18 @@ Codd's 12 rules to define what is required from a database management
 
 ---
 
-Null:
+`NULL`:
  - doesn't have a data type
  - field with no value (not a default value)
  - could be applied to any data type field
- - each action with Null returns Null
- - each comparison with Null returns Unknown
- - there is a special function determines Null value (true|false)
+ - each action with `NULL` returns `NULL`
+ - each comparison with `NULL` returns `UNKNOWN`
+ - there is a special function determines `NULL` value (true|false)
 
 ---
 
-Database Normalization - is a technique of organizing the data in the database. It encompasses a set of procedures designed to eliminate non-simple domains (non-atomic values) and the redundancy (duplication) of data.
- - 1NF: all attributes should be atomic (single value)
- - 2NF: 1NF + simple PK => (split the main table to several tables with PK and FK)
- - 3NF: 2NF + don't have attributes with transitive dependency
- - BCNF: 3NF + all attributes that aren't part of a PK depend on the PK, but not on part of it
+`Database Normalization` - is a technique of organizing the data in the database. It encompasses a set of procedures designed to eliminate non-simple domains (non-atomic values) and the redundancy (duplication) of data.
+ - [1NF](https://en.wikipedia.org/wiki/First_normal_form): all attributes should be atomic (single value)
+ - [2NF](https://en.wikipedia.org/wiki/Second_normal_form): 1NF + simple PK => (split the main table to several tables with PK and FK)
+ - [3NF](https://en.wikipedia.org/wiki/Third_normal_form): 2NF + don't have attributes with transitive dependency
+ - [BCNF](https://en.wikipedia.org/wiki/Boyce–Codd_normal_form): 3NF + all attributes that aren't part of a PK depend on the PK, but not on part of it

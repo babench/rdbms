@@ -1,4 +1,4 @@
--- procedure wuth transaction: use PostgreSQL 11+
+-- procedure with transaction: use PostgreSQL 11+
 
 CREATE OR REPLACE PROCEDURE next_store_order(VARCHAR(512), INT, VARCHAR(50)) AS
 $$
@@ -18,7 +18,7 @@ BEGIN
                     from otus.product as p
                     where p.description = _product_name and p.count >= _order_product_count FOR UPDATE);
     IF (_product_id IS NULL OR _product_id = 0) THEN
-        RAISE EXCEPTION 'product % not found', _product_name;
+        RAISE EXCEPTION 'product % or required product quantity not found', _product_name;
     END IF;
 
     -- select product price

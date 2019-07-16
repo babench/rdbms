@@ -223,7 +223,14 @@ SELECT * FROM `testlock` WHERE id=1 FOR UPDATE; /* TRY TO GET X LOCK - DEADLOCK 
 COMMIT;
 ```
 
-
+ - use transaction and pessimistic block to exclude `lost update`
+```mysql
+BEGIN;
+     $amount = select amount from balance where user_id = ? for update;
+     $amount = /*...calculation...*/
+     update balance set amount = $amount where user_id = ?;
+COMMIT;
+```
 ---
 [MVCC](https://en.wikipedia.org/wiki/Multiversion_concurrency_control) (multiversion concurrency control) - is a concurrency control method commonly used by RDBMS to provide concurrent access to the database.
 
