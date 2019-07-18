@@ -129,6 +129,7 @@ Database N  -->
 ```
 
 `OLAP cube` - is a multi-dimensional array of data, hypercube if N > 3
+
 example:  summarize financial data by `product`, by `time-period`, and by `city` to compare actual and budget expenses
 ```
                 (Y) month:
