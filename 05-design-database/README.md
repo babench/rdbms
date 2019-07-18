@@ -145,7 +145,7 @@ example:  summarize financial data by `product`, by `time-period`, and by `city`
 dimension's measure:
 city: Moscow
 month: September
-goods: apple
+product: apple
 profit: 63 000 RUB
 ```
 
