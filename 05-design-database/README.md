@@ -130,7 +130,24 @@ Database N  -->
 
 `OLAP cube` - is a multi-dimensional array of data, hypercube if N > 3
 example:  summarize financial data by `product`, by `time-period`, and by `city` to compare actual and budget expenses
+```
+                (Y) month:
+                Sept | Oct | ...
+                  /   /
+               +------+         
+              /      /|         
+(X) cities:  +------+ |
+ Moscow -    | ∆    | +  (Z) products:
+ Tver -      |      |/   - apple
+ ... -       +------+    - pear
+                         - ...
 
+dimension's measure:
+city: Moscow
+month: September
+goods: apple
+profit: 63 000 RUB
+```
 
 ---
 `Replication` is the process of copying data from one source to another (or to many others) and Vice versa.
