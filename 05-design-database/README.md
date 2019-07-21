@@ -3,7 +3,7 @@ Design the database
 
 ### Goal
 
- - Business tasks:
+ - Business tasks for e-commerce store:
    - make an order to buy a product in an e-commerce store `call next_store_order('product 1', 22, 'dmitriy@invalid.test');`
    - be able to cancel a not delivered product yet from an e-commerce store `call cancel_store_order(1, 1);`
    - be able to change the count of products in an not paid order `call change_order_count(1, 1, 48);`
@@ -29,6 +29,24 @@ $ docker exec -ti otus-database bash
 bash-4.4# psql -U store_user -d store
 psql (11.4)
 Type "help" for help.
+```
+ - Show database schema of the e-commerce store
+```sql
+store=# \dt+ otus.
+                                                  List of relations
+ Schema |       Name        | Type  |   Owner    |    Size    |                     Description
+--------+-------------------+-------+------------+------------+------------------------------------------------------
+ otus   | account           | table | store_user | 16 kB      | e-commerce store accounts
+ otus   | manufacturer      | table | store_user | 16 kB      | manufacturers of products
+ otus   | order             | table | store_user | 0 bytes    | clients orders
+ otus   | order_details     | table | store_user | 8192 bytes | detailed information by each order
+ otus   | order_log         | table | store_user | 0 bytes    | orders changelog
+ otus   | product           | table | store_user | 16 kB      | products of the e-commerce store
+ otus   | product_price     | table | store_user | 8192 bytes | product prices depend on manufacturers and suppliers
+ otus   | product_price_log | table | store_user | 8192 bytes | product price changelog
+ otus   | product_property  | table | store_user | 16 kB      | properties for each product
+ otus   | supplier          | table | store_user | 16 kB      | companies responsible for the logistics
+(10 rows)
 ```
 
 ## Stop
