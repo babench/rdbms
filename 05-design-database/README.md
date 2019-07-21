@@ -31,6 +31,9 @@ psql (11.4)
 Type "help" for help.
 ```
  - Show database schema of the e-commerce store
+   - 1st part: `manufacturer`, `supplier`, `product`, `product_property`, `product_price`, `product_price_log`
+   - 2nd part: `account` with enum `account_type`
+   - 3rd part: `order` with enum `order_status`, `order_details`, `order_log`
 ```sql
 store=# \dt+ otus.
                                                   List of relations
