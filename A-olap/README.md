@@ -12,7 +12,7 @@ Top `OLAP` Tools
 
 1. [IBM Cognos](https://en.wikipedia.org/wiki/IBM_Cognos_Analytics)
 2. [Micro Strategy](https://en.wikipedia.org/wiki/MicroStrategy)
-3. [Jedox Palo BI Suite](https://en.wikipedia.org/wiki/Palo_(OLAP_database\))
+3. [Jedox Palo BI Suite](https://en.wikipedia.org/wiki/Palo_(OLAP_database))
 4. [Apache Kylin](https://en.wikipedia.org/wiki/Apache_Kylin)
 5. [IcCube](https://en.wikipedia.org/wiki/IcCube)
 6. [Pentaho BI Suite](https://en.wikipedia.org/wiki/Pentaho)
