@@ -19,4 +19,8 @@ Add indexes and constraints
 ## Homework 5: [Design the database](https://github.com/DmitriySh/rdbms-course/tree/master/05-design-database)
 Add business tasks and edit schema
 
-## Appendix A: [OLAP description](https://github.com/DmitriySh/rdbms-course/tree/master/A-olap)
+---
+
+### Appendix
+
+ - [OLAP description](https://github.com/DmitriySh/rdbms-course/tree/master/A-olap)
