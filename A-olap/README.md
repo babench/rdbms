@@ -132,6 +132,6 @@ from [invoices1]
 ```
 
 ---
-Links: 
-https://habr.com/ru/post/126810
+Links:  
+https://habr.com/ru/post/126810  
 https://sqljunkieshare.com/2013/04/25/creating-querying-tuning-hierarchical-rolap-cubes-in-oracle/
