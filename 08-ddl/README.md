@@ -63,7 +63,7 @@ Removing network 08-ddl_default
 
 [Data Definition Language (DDL)](https://en.wikipedia.org/wiki/Data_definition_language) - is a sublanguage of SQL to define/modify data structures, especially database schemas
 
- - All statements are atomic operations that
+ - All statements are atomic operations
  - Statement commits open transaction in `MS SQL`, `MySQL`, `Oracle` and it is the reason don't mix transactions with `DML` and `DDL` statements
 ```sql
 -- MySQL
@@ -127,8 +127,8 @@ CREATE TABLE employees (
 ```
 
 
-`ALTER` - change the properties of objects inside of RDBMS; lock on the table
-hint:
+`ALTER` - change the properties of objects inside of RDBMS; lock on the table  
+performance hint:
  - add nullable column
  - update rows at several transactions
  - set default and not nullable value
@@ -162,10 +162,10 @@ CREATE TABLE IF NOT EXISTS foo(i int);
 
 ---
 `Table inheritance` - is a feature defined in `SQL:1999`, allows to extract a common set of columns into a parent table, children tables define additional fields
-   - `PostgreSQL` inheritance is not SQL-compliant
-   - `MySQL`, `Oracle` and `MS SQL` does not support it
+  - `PostgreSQL` inheritance is not SQL-compliant
+  - `MySQL`, `Oracle` and `MS SQL` does not support it
 
- - In `PostgreSQL`, a table can inherit from 0..* tables
+ - In `PostgreSQL`, a table can inherit from [0..*) tables
  - `INSERT` always inserts into exactly the table specified
  - `SELECT`, `UPDATE`, `DELETE` typically include child tables in a result, unless explicitly specified `ONLY` notation
  - All `CHECK` constraints and `NOT NULL` constraints are automatically inherited from parent to child tables unless explicitly specified `NO INHERIT`
@@ -223,29 +223,26 @@ Benefits:
  - Partition table could be divided into sub-partitions with another form of partitioning (parent table -> range partitioning by date -> list subpartition by region)
  - Available for `MySQL`, `Oracle`, `PostgreSQL` and `MS SQL`
    - `MySQL` has a limit for 8192 partitions
-   - each partition is a `child` table of a single `parent` table with explicit _constraint_ and _index_ by key columns (date for example)
-   - parent table is empty and exists only to represent the whole data set
-   - trigger and trigger function dispatch insert statements and spread to each child table
-   - each partition maps to its own filegroup (one or more data files)
 
-
+   
  - `PostgreSQL 9.x` allows table partitioning via `table inheritance`
-  - create parent table and child tables with `CHECK` constraints for each one
-  - create a trigger `BEFORE INSERT` and trigger function to route each insert to the concrete child table
-  - parent table shouldn't have a data
+   - each partition is a `child` table of a single `parent` table with explicit _constraint_ and _index_ by key columns (date for example)
+   - create a trigger `BEFORE INSERT` and trigger function dispatch insert statements and spread to each child table
+   - parent table is empty and exists only to represent the whole data set
+   - each partition maps to its own filegroup (one or more data files)
  - Since `PostgreSQL 10.x` and `11.x` partitioning has been simplified by integration into the database engine:
    - no need a trigger to override insertions into the parent table to the corresponding partition table
    - have instructions to attach/detach partitions from the parent table
    - have a sub-partitions and new system table `pg_partitioned_table`
    - `VACUUM` and `ANALYZE` work for all partitions from the parent table
-   - Rows move automatically between partitions by `UPDATE`
+   - rows move automatically between partitions by `UPDATE`
    - partition tables shouldn't have additional columns
 
-
+   
 Partitioning there are 3 forms:
  - Range Partitioning
    - defined by a key column or set of columns, with no overlap between the ranges of values
-   - examples: [January..February], [March..April], [May..June], [July..August]
+   - examples: [January..February], [March..April], [May..June], [July..August], ...
 
  - List Partitioning
    - defined by lists of key explicitly assign by partitions
@@ -294,7 +291,6 @@ Benefits:
 
  - could be used to store variable values or loads data from external services
  - tables are automatically dropped at the end of a session or current transaction (optionally) (MySQL, MS SQL, PostgreSQL)
- - rows are automatically dropped at the end of a session (Oracle)
  - action for a commit in session: `DELETE ROWS`, `PRESERVE ROWS`
 
 ```sql
