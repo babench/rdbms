@@ -19,6 +19,11 @@ Add indexes and constraints
 ## Homework 5: [Design the database](https://github.com/DmitriySh/rdbms-course/tree/master/05-design-database)
 Add business tasks and edit schema
 
+## Homework 8: [Data Definition Language](https://github.com/DmitriySh/rdbms-course/tree/feature/08-ddl/08-ddl)
+DDL for a database with Docker container
+
+
+
 ---
 
 ### Appendix
