@@ -76,7 +76,7 @@ RETURNING phone_book_id;
 ```
 
 
-`SELECT` – is used to retrieve data from the a database
+`SELECT` – is used to retrieve data from the database
   - `DISTINCT` eliminates duplicate rows from the result
   - `GROUP BY` combine into groups of rows that match on one or more values
   - `LIMIT`/`FETCH`/`OFFSET` return a subset of the result rows
@@ -122,7 +122,7 @@ INSERT ... ON CONFLICT DO UPDATE
 ```
 
 
-`MERGE` - statement to `INSERT` new records or `UPDATE`, or `DELETE` existing records depending on whether condition matches
+`MERGE` - a statement to `INSERT` new records or `UPDATE`, or `DELETE` existing records depending on whether condition matches
   - introduced in `SQL:2003` and expanded in the `SQL:2008`
   - based on `INNER JOIN` of 2 tables: _source_ and _target_; the _target_ table is the table to be modified based on data contained within the _source_ table
   - merge condition results in one of 3 states:  `MATCHED`, `NOT MATCHED`, or `NOT MATCHED BY SOURCE`
