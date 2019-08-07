@@ -124,8 +124,9 @@ INSERT ... ON CONFLICT DO UPDATE
 
 `MERGE` - a statement to `INSERT` new records or `UPDATE`, or `DELETE` existing records depending on whether condition matches
   - introduced in `SQL:2003` and expanded in the `SQL:2008`
-  - based on `INNER JOIN` of 2 tables: _source_ and _target_; the _target_ table is the table to be modified based on data contained within the _source_ table
+  - based on `LEFT OUTER JOIN` of 2 tables: _source_ and _target_; the _target_ table is the table to be modified based on data contained within the _source_ table
   - merge condition results in one of 3 states:  `MATCHED`, `NOT MATCHED`, or `NOT MATCHED BY SOURCE`
+  - implemented in `Oracle`, `DB2`, `MS SQL` but not in `MySQL` and `PostgreSQL`
 ![](https://277dfx2bm2883ohl6u2g3l59-wpengine.netdna-ssl.com/wp-content/uploads/2016/11/VISUAL-MERGE-DIAGRAM.png)
 
 ```sql
@@ -139,3 +140,74 @@ WHEN NOT MATCHED
 WHEN NOT MATCHED BY SOURCE
      THEN DELETE;
 ```
+
+
+---
+PS:  
+`WITH Syntax (Common Table Expressions)` - is a named temporary result set that exists within the scope of a single statement and that can be referred to later within that statement, possibly multiple times
+ - it is an auxiliary statement for use in a larger query that helps to simplify it
+ - `WITH` could use statements `SELECT`, `INSERT`, `UPDATE`, or `DELETE`
+ - `WITH` clause is attached to a parent statement that can also be a `SELECT`, `INSERT`, `UPDATE`, or `DELETE`
+ - query into `WITH` evaluates only once per execution of the parent query, even if it referred to more than once by the parent query or sibling `WITH` queries
+ - query into `WITH` will generally be evaluated as written and extract as many rows as it can
+   - but for `SELECT` parent statement evaluation might stop early if the parent query demand only a limited number of rows
+   - data-modifying statements (`INSERT`, `UPDATE`, or `DELETE`) in `WITH` are executed exactly once, and always to completion, independently of whether the primary query
+   - optional `RECURSIVE` modifier is a feature query can refer to itself (its own output)
+     - the process is _iteration_, not _recursion_, but `RECURSIVE` is the terminology chosen by the SQL standards committee
+
+```sql
+WITH selected_films AS (
+    SELECT film_id, title,
+        (CASE 
+            WHEN length < 30 THEN 'Short'
+            WHEN length >= 30 AND length < 90 THEN 'Medium'
+            WHEN length > 90 THEN 'Long'
+        END) length    
+    FROM film
+)
+SELECT film_id, title, length
+FROM selected_films
+WHERE length = 'Long'
+ORDER BY title;
+```
+
+```sql
+-- move rows from 'products' table to 'products_log'
+WITH moved_rows AS (
+    DELETE FROM products
+    WHERE "date" >= '2010-10-01' AND "date" < '2010-11-01'
+    RETURNING *
+)
+INSERT INTO products_log SELECT * FROM moved_rows;
+```
+
+```sql
+-- calculate factorial(10)
+WITH RECURSIVE cte (n, f) AS (
+  -- first part
+  SELECT 1 as n, 1 as f
+  UNION
+  -- recursive part
+  SELECT (n + 1) as n, f * (n + 1) as f FROM cte WHERE n < 10
+)
+SELECT cte.n as number, cte.f as factorial FROM cte;
+ number | factorial
+--------+-----------
+      1 |         1
+      2 |         2
+      3 |         6
+      4 |        24
+      5 |       120
+      6 |       720
+      7 |      5040
+      8 |     40320
+      9 |    362880
+     10 |   3628800
+(10 rows)
+```
+
+Links:  
+ - https://dev.mysql.com/doc/refman/8.0/en/sql-syntax-data-manipulation.html
+ - https://dev.mysql.com/doc/refman/8.0/en/with.html
+ - https://www.postgresql.org/docs/11/sql-commands.html
+ - https://www.postgresql.org/docs/11/queries-with.html
