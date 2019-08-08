@@ -7,7 +7,9 @@ Data Manipulation Language
  - Run [Docker](https://www.docker.com) container from a database image
  - Use [Docker Compose](https://docs.docker.com/compose/) with `DDL` script
  - Open an external port to connect to the database
- - Script `hw-dml.sql` has a statement evaluetes on a database
+ - Script `schema_postgresql.sql` is a DB schema (DDL)
+ - Script `data_postgresql.sql` it is an initial DB state
+ - Script `hw-dml.sql` has statements executed on a database for a homework
 
 
 ## Run
