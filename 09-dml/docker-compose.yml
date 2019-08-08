@@ -10,5 +10,7 @@ services:
       POSTGRES_PASSWORD: owner
     volumes:
       - ./schema_postgresql.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - ./data_postgresql.sql:/docker-entrypoint-initdb.d/2-data.sql
+      - ./hw-dml.sql:/docker-entrypoint-initdb.d/3-hw-dml.sql
     ports:
       - "5432:5432"
