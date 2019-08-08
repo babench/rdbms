@@ -7,6 +7,9 @@ Data Manipulation Language
  - Run [Docker](https://www.docker.com) container from a database image
  - Use [Docker Compose](https://docs.docker.com/compose/) with `DDL` script
  - Open an external port to connect to the database
+ - Script `hw-dml.sql` has a statement evaluetes on a database
+ 
+ 
 
 
 ## Run
@@ -118,7 +121,9 @@ DELETE FROM trees WHERE height < 80;
 
 `UPSERT` - an operation to `INSERT` a row or `UPDATE` if the row already existing
 ```sql
-INSERT ... ON CONFLICT DO UPDATE
+INSERT INTO token (id, token) 
+VALUES ('id', 'token') 
+ON CONFLICT (id) DO UPDATE SET token = 'token'
 ```
 
 
