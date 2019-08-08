@@ -8,8 +8,6 @@ Data Manipulation Language
  - Use [Docker Compose](https://docs.docker.com/compose/) with `DDL` script
  - Open an external port to connect to the database
  - Script `hw-dml.sql` has a statement evaluetes on a database
- 
- 
 
 
 ## Run
