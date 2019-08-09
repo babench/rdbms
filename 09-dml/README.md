@@ -8,8 +8,16 @@ Data Manipulation Language
  - Use [Docker Compose](https://docs.docker.com/compose/) with `DDL` script
  - Open an external port to connect to the database
  - Script `schema_postgresql.sql` is a DB schema (DDL)
- - Script `data_postgresql.sql` it is an initial DB state
+ - Script `data_postgresql.sql` it is an initial DB state (DML)
  - Script `hw-dml.sql` has statements executed on a database for a homework
+   - simple `INSERT` statement
+   - `INSERT` by select
+   - simple `UPDATE` statement
+   - `UPDATE` by `JOIN` (use `FROM` for [PostgreSQL](https://www.postgresql.org))
+   - simple `DELETE` statement
+   - call the procedure to make an order to buy a product in an e-commerce store `next_store_order`
+     - data in tables `otus.order`, `otus.order_log`, `otus.order_details`
+   - `MERGE`... `PostgreSQL 11` and older versions don't support this SQL statement
 
 
 ## Run
