@@ -1,3 +1,5 @@
+-- hw 09-dml-changing data
+
 -- use temp table for home work only
 CREATE TEMP TABLE IF NOT EXISTS account_temp
 (
@@ -22,7 +24,7 @@ VALUES (4, 'pwd_hash4', '+71903410902', 'alexey@invalid.test', 'client', 'alexey
         '1981-12-04'),
        (6, 'pwd_hash6', '+71090104422', 'igor@invalid.test', 'manager', 'igor', 'shishmakov', false, '1991-06-03');
 
--- insert by select
+-- insert by select (use temp table)
 INSERT INTO otus.account (id, pwd_hash, phone, email, type, first_name, surname, deleted, birthdate)
 SELECT act.id,
        act.pwd_hash,
@@ -41,14 +43,17 @@ SET phone        = '+76160061600',
     updated_time = now()
 WHERE id = 1;
 
--- update by join
+-- update by join (use FROM for PostgreSQL)
 UPDATE otus.account as ac
 SET first_name   = act.first_name,
     updated_time = now()
 FROM account_temp as act
 WHERE ac.phone = act.phone;
 
--- delete all inserted data
+-- delete all inserted data (from temp table)
 DELETE
 FROM otus.account
 WHERE id in (4, 5, 6);
+
+-- the procedure to make an order to buy a product in an e-commerce store
+call next_store_order('product 1', 22, 'dmitriy@invalid.test');
