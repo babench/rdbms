@@ -1,4 +1,5 @@
 -- procedure with transaction: use PostgreSQL 11+
+-- the procedure to change the product price
 
 CREATE OR REPLACE PROCEDURE change_product_price(VARCHAR(512), VARCHAR(50), NUMERIC(14, 2)) AS
 $$

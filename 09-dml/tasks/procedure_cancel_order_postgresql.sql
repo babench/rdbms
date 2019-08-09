@@ -1,4 +1,5 @@
 -- procedure with transaction: use PostgreSQL 11+
+-- the procedure to make cancel a not delivered product yet from an e-commerce store
 
 CREATE OR REPLACE PROCEDURE cancel_store_order(BIGINT, BIGINT) AS
 $$

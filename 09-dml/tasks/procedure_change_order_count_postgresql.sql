@@ -1,4 +1,5 @@
 -- procedure with transaction: use PostgreSQL 11+
+-- the procedure to change the count of products in an not paid order
 
 CREATE OR REPLACE PROCEDURE change_order_count(BIGINT, BIGINT, INT) AS
 $$

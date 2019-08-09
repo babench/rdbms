@@ -1,4 +1,5 @@
 -- procedure with transaction: use PostgreSQL 11+
+-- the procedure to change order status step by step
 
 CREATE OR REPLACE PROCEDURE change_store_order_status(BIGINT, BIGINT, otus.order_status) AS
 $$
