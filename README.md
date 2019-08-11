@@ -22,6 +22,8 @@ Add business tasks and edit schema
 ## Homework 8: [Data Definition Language](https://github.com/DmitriySh/rdbms-course/tree/master/08-ddl)
 DDL for a database with Docker container
 
+## Homework 9: [Data Manipulation Language](https://github.com/DmitriySh/rdbms-course/tree/feature/09-dml/09-dml)
+DML for a database
 
 
 ---
