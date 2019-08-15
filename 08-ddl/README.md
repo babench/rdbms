@@ -299,7 +299,7 @@ CREATE TEMP TABLE customers(id INT);
 ```
 
 ------------------------------------------------------
-[Data control language (DDL)](https://en.wikipedia.org/wiki/Data_control_language) - is a sublanguage of SQL used to control access to data stored in a database
+[Data Control Language (DCL)](https://en.wikipedia.org/wiki/Data_control_language) - is a sublanguage of SQL used to control access to data stored in a database
 
 
 Statements:
