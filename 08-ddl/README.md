@@ -1,4 +1,4 @@
-Data Definition Language
+Data Definition Language: schema
 =======
 
 
@@ -7,6 +7,7 @@ Data Definition Language
  - Run [Docker](https://www.docker.com) container from a database image
  - Use [Docker Compose](https://docs.docker.com/compose/) with `DDL` script
  - Open an external port to connect to the database
+ - Schema of a database structure
 
 
 ## Run
