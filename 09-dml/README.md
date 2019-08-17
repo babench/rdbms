@@ -90,6 +90,7 @@ RETURNING phone_book_id;
 `SELECT` – is used to retrieve data from the database
   - `DISTINCT` eliminates duplicate rows from the result
   - `GROUP BY` combine into groups of rows that match on one or more values
+  - `ORDER BY`sort rows by one or several columns
   - `LIMIT`/`FETCH`/`OFFSET` return a subset of the result rows
   - `INTO` set selected values to variables
   - `FOR UPDATE` statement locks the selected rows against concurrent locks/updates/deletes in other transactions and child rows by PK
