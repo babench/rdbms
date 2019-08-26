@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+  database:
+    container_name: otus-database
+    image: mysql:8.0.17
+    environment:
+      MYSQL_USER: voip_user
+      MYSQL_PASSWORD: owner
+      MYSQL_DATABASE: voip
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./voip.sql:/docker-entrypoint-initdb.d/1-schema.sql
+    ports:
+      - "3306:3306"
