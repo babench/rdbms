@@ -4,10 +4,80 @@ Data Manipulation Language: data modification
 
 ### Goal
 
- - Run [Docker](https://www.docker.com) container from a database image
- - Use [Docker Compose](https://docs.docker.com/compose/) with `DDL` script
- - Open an external port to connect to the database
-
+ - Run [Docker](https://www.docker.com) container with `voip` database
+ - Task: calculate the phone call price
+ - Tables for calculating the price of a phone call: `CDR`, `oper_ip`, `SITE`, `RATES` and `DEST_CODE`
+ - `CDR` is the table of phone calls from an operator
+```sql
+-- CDR.cid - surrogate ID of the table
+-- CDR.callid - a phone call identifier
+-- CDR.src_ip - an IP address of a phone call from an operator (*)
+-- CDR.setup_time - a phone call date and time
+mysql> select c.cid, c.callid, c.host, c.src_ip, c.dst_ip, c.src_number_bill, c.dst_number_bill, c.setup_time
+    -> from CDR as c where c.src_ip is not null limit 10;
++-----------+----------------------------------+----------------+--------------+---------------+-----------------+-----------------+---------------------+
+| cid       | callid                           | host           | src_ip (*)   | dst_ip        | src_number_bill | dst_number_bill | setup_time          |
++-----------+----------------------------------+----------------+--------------+---------------+-----------------+-----------------+---------------------+
+| 830385127 | 3A3AD8B2EE8211E786D62C59E59A3C25 | 217.118.24.215 | 195.219.39.9 | 104.155.12.12 | 17114131655     | 48790805006     | 2018-01-01 00:02:26 |
+| 830385128 | 3AB1D7B4EE8211E786E02C59E59A3C25 | 217.118.24.215 | 195.219.39.9 | 104.155.12.12 | 11300603811     | 48576970511     | 2018-01-01 00:02:26 |
+| 830385129 | 3AAE8AF0EE8211E786E02C59E59A3C25 | 217.118.24.215 | 195.219.39.9 | 104.155.12.12 | 13372816037     | 48796639328     | 2018-01-01 00:02:27 |
+...
+```
+ - `oper_ip` is the table of registered IP addresses
+```sql
+-- oper_ip.id - surrogate ID of the table
+-- oper_ip.op_id - operator identifier (*)
+-- oper_ip.ip_op - an IP address of a phone call from an operator (*)
+mysql> select o.id, o.op_id, o.ip_op, o.gateway_id from oper_ip as o limit 10;
++------+----------+---------------+--------------------------+
+| id   | op_id (*)| ip_op (*)     | gateway_id               |
++------+----------+---------------+--------------------------+
+| 1904 |   209    | 188.40.92.145 | Melliton_GW_2            |
+| 1905 |   209    | 85.29.138.100 | Melliton_GW_21           |
+| 2290 |   216    | 85.10.192.13  | QuickDial_GW_271         |
+...
+```
+ - `SITE` is the table of operator sites (departments)
+```sql
+-- SITE.id - operator identifier (*)
+-- SITE.sitename - name of site
+-- SITE.rate_o - rate number of an operator at assignment time (*)
+mysql> select s.id, s.sitename, s.rate_o from SITE as s limit 10;
++-------+--------------------+-----------+
+| id (*)| sitename           | rate_o (*)|
++-------+--------------------+-----------+
+|   1   | Unknown IP         |      0    |
+|   4   | QuickDial          |    700    |
+| 209   | Melliton 777#      |    934    |
+...
+```
+ - `RATES` is the table of phone call rates
+```sql
+-- RATES.code_id - code of rate number (*)
+-- RATES.rate_id - rate number of an operator at assignment time (*)
+-- RATES.price - phone call price (!)
+mysql> select r.code_id, r.rate_id, r.price from RATES as r limit 10;
++------------+------------+----------+
+| code_id (*)| rate_id (*)| price (!)|
++------------+------------+----------+
+|  188990    |     850    | 0.039600 |
+|   99788    |     850    | 0.023700 |
+|  188991    |     850    | 0.032300 |
+...
+```
+ - `DEST_CODE` is the table of code descriptions for a phone calls (should be found max code of CDR.BILL_NUMBER for price)
+```sql
+-- DEST_CODE.DEST_ID - code of rate number (*)
+-- DEST_CODE.CODE - code description
+mysql> select * from DEST_CODE limit 10;
++------------+------+
+| DEST_ID (*)| CODE |
++------------+------+
+|       1    | 0    |
+|       1    | 1    |
+|       1    | 2    |
+...
+```
 
 
 ## Run
@@ -21,7 +91,7 @@ Attaching to otus-database
 ...
 
 $ docker exec -ti otus-database bash
-root@f5e040d19d55:/# mysql -u voip_user -p
+root@f5e040d19d55:/# mysql -u voip_user -D voip -p
 Enter password:
 ...
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
@@ -35,59 +105,17 @@ mysql> show databases;
 +--------------------+
 2 rows in set (0.01 sec)
 
-mysql> use voip;
-Database changed
-```
-
- - `CDR` is the table of phone calls (information)
-```sql
--- CDR.CID - surrogate ID of the table
--- CDR.CALLID - a phone call identifier
--- CDR.SRC_IP - an IP address of a phone call from an operator
--- CDR.SETUP_TIME - a phone call date and time
-mysql> select c.CID, c.CALLID, c.HOST, c.SRC_IP, c.DST_IP, c.SRC_NUMBER_BILL, c.DST_NUMBER_BILL, c.SETUP_TIME from CDR as c where c.src_ip is not null limit 10;
-+-----------+----------------------------------+----------------+--------------+---------------+-----------------+-----------------+---------------------+
-| CID       | CALLID                           | HOST           | SRC_IP       | DST_IP        | SRC_NUMBER_BILL | DST_NUMBER_BILL | SETUP_TIME          |
-+-----------+----------------------------------+----------------+--------------+---------------+-----------------+-----------------+---------------------+
-| 830385127 | 3A3AD8B2EE8211E786D62C59E59A3C25 | 217.118.24.215 | 195.219.39.9 | 104.155.12.12 | 17114131655     | 48790805006     | 2018-01-01 00:02:26 |
-| 830385128 | 3AB1D7B4EE8211E786E02C59E59A3C25 | 217.118.24.215 | 195.219.39.9 | 104.155.12.12 | 11300603811     | 48576970511     | 2018-01-01 00:02:26 |
-| 830385129 | 3AAE8AF0EE8211E786E02C59E59A3C25 | 217.118.24.215 | 195.219.39.9 | 104.155.12.12 | 13372816037     | 48796639328     | 2018-01-01 00:02:27 |
+mysql> show tables;
++------------------------+
+| Tables_in_voip         |
++------------------------+
+| ACLOSE_STAT            |
+| ACTIONS                |
 ...
-```
-
- - `oper_ip` is the table of registered IP addresses
-```sql
--- oper_ip.id - surrogate ID of the table
--- oper_ip.op_id - operator identifier
--- oper_ip.ip_op - an IP address of a phone call from an operator
-mysql> select o.id, o.op_id, o.ip_op, o.gateway_id from oper_ip as o limit 10;
-+------+-------+---------------+--------------------------+
-| id   | op_id | ip_op         | gateway_id               |
-+------+-------+---------------+--------------------------+
-| 1904 |   209 | 188.40.92.145 | Melliton_GW_2            |
-| 1905 |   209 | 85.29.138.100 | Melliton_GW_21           |
-| 2290 |   216 | 85.10.192.13  | QuickDial_GW_271         |
-| 2800 |    14 | 46.249.44.230 | TeleXchange_System_GW_15 |
-...
-```
-
- - Show database schema of the e-commerce store
-```sql
-store=# \dt+ otus.
-                                                  List of relations
- Schema |       Name        | Type  |   Owner    |    Size    |                     Description
---------+-------------------+-------+------------+------------+------------------------------------------------------
- otus   | account           | table | store_user | 16 kB      | e-commerce store accounts
- otus   | manufacturer      | table | store_user | 16 kB      | manufacturers of products
- otus   | order             | table | store_user | 0 bytes    | clients orders
- otus   | order_details     | table | store_user | 8192 bytes | detailed information by each order
- otus   | order_log         | table | store_user | 0 bytes    | orders changelog
- otus   | product           | table | store_user | 16 kB      | products of the e-commerce store
- otus   | product_price     | table | store_user | 8192 bytes | product prices depend on manufacturers and suppliers
- otus   | product_price_log | table | store_user | 8192 bytes | product price changelog
- otus   | product_property  | table | store_user | 16 kB      | properties for each product
- otus   | supplier          | table | store_user | 16 kB      | companies responsible for the logistics
-(10 rows)
+| user_agents            |
+| user_info              |
++------------------------+
+71 rows in set (0.01 sec)
 ```
 
 
