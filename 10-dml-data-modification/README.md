@@ -13,21 +13,22 @@ Data Manipulation Language: data modification
 -- CDR.callid - a phone call identifier
 -- CDR.src_ip - an IP address of a phone call from an operator (*)
 -- CDR.setup_time - a phone call date and time
-mysql> select c.cid, c.callid, c.host, c.src_ip, c.dst_ip, c.src_number_bill, c.dst_number_bill, c.setup_time
-    -> from CDR as c where c.src_ip is not null limit 10;
-+-----------+----------------------------------+----------------+--------------+---------------+-----------------+-----------------+---------------------+
-| cid       | callid                           | host           | src_ip (*)   | dst_ip        | src_number_bill | dst_number_bill | setup_time          |
-+-----------+----------------------------------+----------------+--------------+---------------+-----------------+-----------------+---------------------+
-| 830385127 | 3A3AD8B2EE8211E786D62C59E59A3C25 | 217.118.24.215 | 195.219.39.9 | 104.155.12.12 | 17114131655     | 48790805006     | 2018-01-01 00:02:26 |
-| 830385128 | 3AB1D7B4EE8211E786E02C59E59A3C25 | 217.118.24.215 | 195.219.39.9 | 104.155.12.12 | 11300603811     | 48576970511     | 2018-01-01 00:02:26 |
-| 830385129 | 3AAE8AF0EE8211E786E02C59E59A3C25 | 217.118.24.215 | 195.219.39.9 | 104.155.12.12 | 13372816037     | 48796639328     | 2018-01-01 00:02:27 |
+mysql> select c.cid, c.callid, c.host, c.src_ip, c.dst_ip, c.setup_time
+       from CDR as c where c.src_ip is not null limit 10;
++-----------+----------------------------------+----------------+--------------+---------------+---------------------+
+| cid       | callid                           | host           | src_ip (*)   | dst_ip        | setup_time          |
++-----------+----------------------------------+----------------+--------------+---------------+---------------------+
+| 830385127 | 3A3AD8B2EE8211E786D62C59E59A3C25 | 217.118.24.215 | 195.219.39.9 | 104.155.12.12 | 2018-01-01 00:02:26 |
+| 830385128 | 3AB1D7B4EE8211E786E02C59E59A3C25 | 217.118.24.215 | 195.219.39.9 | 104.155.12.12 | 2018-01-01 00:02:26 |
+| 830385129 | 3AAE8AF0EE8211E786E02C59E59A3C25 | 217.118.24.215 | 195.219.39.9 | 104.155.12.12 | 2018-01-01 00:02:27 |
 ...
 ```
+
  - `oper_ip` is the table of registered IP addresses
 ```sql
 -- oper_ip.id - surrogate ID of the table
 -- oper_ip.op_id - operator identifier (*)
--- oper_ip.ip_op - an IP address of a phone call from an operator (*)
+-- oper_ip.ip_op - IP address of a phone call from an operator (*)
 mysql> select o.id, o.op_id, o.ip_op, o.gateway_id from oper_ip as o limit 10;
 +------+----------+---------------+--------------------------+
 | id   | op_id (*)| ip_op (*)     | gateway_id               |
@@ -37,6 +38,7 @@ mysql> select o.id, o.op_id, o.ip_op, o.gateway_id from oper_ip as o limit 10;
 | 2290 |   216    | 85.10.192.13  | QuickDial_GW_271         |
 ...
 ```
+
  - `SITE` is the table of operator sites (departments)
 ```sql
 -- SITE.id - operator identifier (*)
@@ -51,6 +53,7 @@ mysql> select s.id, s.sitename, s.rate_o from SITE as s limit 10;
 | 209   | Melliton 777#      |    934    |
 ...
 ```
+
  - `RATES` is the table of phone call rates
 ```sql
 -- RATES.code_id - code of rate number (*)
@@ -65,19 +68,161 @@ mysql> select r.code_id, r.rate_id, r.price from RATES as r limit 10;
 |  188991    |     850    | 0.032300 |
 ...
 ```
- - `DEST_CODE` is the table of code descriptions for a phone calls (should be found max code of CDR.BILL_NUMBER for price)
+
+ - `DEST_CODE` is the table of code descriptions for a phone calls (should be found max code for a price)
 ```sql
 -- DEST_CODE.DEST_ID - code of rate number (*)
 -- DEST_CODE.CODE - code description
 mysql> select * from DEST_CODE limit 10;
-+------------+------+
-| DEST_ID (*)| CODE |
-+------------+------+
-|       1    | 0    |
-|       1    | 1    |
-|       1    | 2    |
++------------+----------+
+| DEST_ID (*)| CODE (*) |
++------------+----------+
+|       1    |    0     |
+|       1    |    1     |
+|       1    |    2     |
 ...
 ```
+
+
+
+### Implementation
+
+Overview and preparing for the task
+ - We have the table of IP-addresses with duplicates phone calls (not unique IP-addresses); for example let's have a look to the query
+```sql
+mysql> select o.id, o.op_id, o.ip_op, o.gateway_id from oper_ip as o where o.ip_op = '188.40.92.145';
++------+-------+---------------+---------------+
+| id   | op_id | ip_op         | gateway_id    |
++------+-------+---------------+---------------+
+|  634 |    94 | 188.40.92.145 | Melliton_GW_2 |
+| 1904 |   209 | 188.40.92.145 | Melliton_GW_2 |
+| 1645 |    94 | 188.40.92.145 | Melliton_GW_2 |
+| 2859 |    94 | 188.40.92.145 | Melliton_GW_2 |
+| 2715 |   209 | 188.40.92.145 | Melliton_GW_2 |
++------+-------+---------------+---------------+
+5 rows in set (0.00 sec)
+```
+
+ - Total count of IP-address
+```sql
+mysql> select count(o.ip_op) from oper_ip as o;
++----------------+
+| count(o.ip_op) |
++----------------+
+|            796 |
++----------------+
+1 row in set (0.00 sec)
+```
+
+ - Unique count of IP-address
+```sql
+mysql> select count(distinct o.ip_op) from oper_ip as o;
++-------------------------+
+| count(distinct o.ip_op) |
++-------------------------+
+|                     186 |
++-------------------------+
+1 row in set (0.00 sec)
+```
+
+ - Let's make a temp table without duplicates of IP-address
+```sql
+mysql> create temporary table oper_ip_temp (id int, op_id int, ip_op varchar(20), gateway_id varchar(50));
+
+mysql> insert into oper_ip_temp (id, op_id, ip_op, gateway_id) 
+    select o1.id, o1.op_id, o1.ip_op, o1.gateway_id 
+    from oper_ip as o1 
+    where not exists (select * from oper_ip as o2 where o1.ip_op = o2.ip_op and o1.id > o2.id);
+Query OK, 186 rows affected (0.02 sec)
+Records: 186  Duplicates: 0  Warnings: 0
+
+mysql> select count(ip_op) from oper_ip_temp;
++--------------+
+| count(ip_op) |
++--------------+
+|          186 |
++--------------+
+1 row in set (0.00 sec)
+```
+
+---
+Explanation step by step to find a call price
+ - Select 1 arbitrary row with IP-address of a phone call `(src_ip)`
+```sql
+mysql> select host, callid, elapsed_time, src_ip from CDR limit 1;
++----------------+----------------------------------+--------------+--------------+
+| host           | callid                           | elapsed_time | src_ip       |
++----------------+----------------------------------+--------------+--------------+
+| 217.118.24.215 | 3A3AD8B2EE8211E786D62C59E59A3C25 |            7 | 195.219.39.9 |
++----------------+----------------------------------+--------------+--------------+
+1 row in set (0.00 sec)
+```
+
+ - Find an ID of the operator `(op_id)` whose make the phone call on a previous step `(src_ip)`
+```sql
+mysql> select oper_ip_temp.op_id, cdr_table.src_ip, oper_ip_temp.ip_op, cdr_table.elapsed_time
+    from (select host, callid, elapsed_time, src_ip from CDR limit 1) as cdr_table
+    inner join oper_ip_temp on cdr_table.src_ip = oper_ip_temp.ip_op;
++-------+--------------+--------------+--------------+
+| op_id | src_ip       | ip_op        | elapsed_time |
++-------+--------------+--------------+--------------+
+|   143 | 195.219.39.9 | 195.219.39.9 |            7 |
++-------+--------------+--------------+--------------+
+1 row in set (0.00 sec)
+```
+
+ - Find the phone call rate `(rate_o)` by operator ID `(op_id)`
+```sql
+mysql> select oper_ip_temp.op_id, cdr_table.src_ip, oper_ip_temp.ip_op, cdr_table.elapsed_time, s.rate_o
+    from (select host, callid, elapsed_time, src_ip from CDR limit 1) as cdr_table
+    inner join oper_ip_temp on cdr_table.src_ip = oper_ip_temp.ip_op
+    inner join SITE as s on oper_ip_temp.op_id = s.id;
++-------+--------------+--------------+--------------+--------+
+| op_id | src_ip       | ip_op        | elapsed_time | rate_o |
++-------+--------------+--------------+--------------+--------+
+|   143 | 195.219.39.9 | 195.219.39.9 |            7 |    853 |
++-------+--------------+--------------+--------------+--------+
+1 row in set (0.00 sec)
+```
+
+- Link the phone call rate `(rate_o)` with rates table `(rate_id)` and codes table (code_id)
+```sql
+mysql> select oper_ip_temp.op_id, cdr_table.src_ip, oper_ip_temp.ip_op, cdr_table.elapsed_time, s.rate_o, r.rate_id, r.price, r.code_id, dc.dest_id, dc.code
+    from (select host, callid, elapsed_time, src_ip from CDR limit 1) as cdr_table
+    inner join oper_ip_temp on cdr_table.src_ip = oper_ip_temp.ip_op
+    inner join SITE as s on oper_ip_temp.op_id = s.id
+    inner join RATES as r on s.rate_o = r.rate_id
+    inner join DEST_CODE as dc on dc.dest_id = r.code_id;
++-------+--------------+--------------+--------------+--------+---------+----------+---------+---------+------+
+| op_id | src_ip       | ip_op        | elapsed_time | rate_o | rate_id | price    | code_id | dest_id | code |
++-------+--------------+--------------+--------------+--------+---------+----------+---------+---------+------+
+|   143 | 195.219.39.9 | 195.219.39.9 |            7 |    853 |     853 | 0.011000 |   91609 |   91609 | 1    |
+|   143 | 195.219.39.9 | 195.219.39.9 |            7 |    853 |     853 | 0.005400 |   91609 |   91609 | 1    |
+|   143 | 195.219.39.9 | 195.219.39.9 |            7 |    853 |     853 | 0.003800 |   91615 |   91615 | 1302 |
+    ...   ...
++-------+--------------+--------------+--------------+--------+---------+----------+---------+---------+------+
+15482 rows in set (0.15 sec)
+```
+
+ - First, select the max phone call price `(RATES.price)` by each code `(DEST_CODE.code)`; second, select the max code and its price is `the price of a phone call`
+```sql
+mysql> select CAST(dc.code as UNSIGNED) as code, max(r.price)
+    from (select host, callid, elapsed_time, src_ip from CDR limit 1) as cdr_table
+    inner join oper_ip_temp on cdr_table.src_ip = oper_ip_temp.ip_op
+    inner join SITE as s on oper_ip_temp.op_id = s.id
+    inner join RATES as r on s.rate_o = r.rate_id
+    inner join DEST_CODE as dc on dc.dest_id = r.code_id
+    group by code
+    order by code DESC
+    limit 1;
++-------------+--------------+
+| code        | max(r.price) |
++-------------+--------------+
+| 78482946949 |     0.006200 |
++-------------+--------------+
+1 row in set, 1 warning (0.16 sec)
+```
+
 
 
 ## Run
@@ -131,10 +276,11 @@ Killing otus-database  ... done
 
  - Remove containers and networks
 ```bash
-$ docker-compose -f ./09-dml/docker-compose.yml down
+$ docker-compose -f ./10-dml-data-modification/docker-compose.yml down
 Removing otus-database ... done
 Removing network 09-dml_default
 ```
+
 
 
 ## Documentation
@@ -233,7 +379,6 @@ Best practices:
 
 
 ---
-
 operator `BETWEEN` and ranges:
 ```sql
 SELECT *
@@ -299,6 +444,3 @@ IF (SELECT COUNT(*) FROM actor WHERE actor_id = :id) > 0 THEN
      PRINT 'no'
 END IF;
 ```
-
-Links:  
- - ...  
