@@ -227,7 +227,28 @@ mysql> select CAST(dc.code as UNSIGNED) as code, max(r.price)
 
 ## Run
 
- - Run the MySQL instance by [Docker Compose](https://docs.docker.com/compose/) with local db
+ - Extract the database snapshot file from 7-Zip archive
+```sql
+$ 7z x -o./10-dml-data-modification ./10-dml-data-modification/voip.sql.7z
+7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
+...
+
+Everything is Ok
+
+Size:       1194110062
+Compressed: 74360535
+
+$ ls -lah ./10-dml-data-modification
+total 2488200
+drwxr-xr-x   6 dima  staff   192B  8 сен 21:25 .
+drwxr-xr-x  18 dima  staff   576B  8 сен 21:20 ..
+-rw-r--r--   1 dima  staff    16K  8 сен 21:25 README.md
+-rw-r--r--   1 dima  staff   332B  8 сен 21:11 docker-compose.yml
+-rw-r--r--   1 dima  staff   1,1G 25 авг 17:26 voip.sql
+-rw-r--r--   1 dima  staff    71M  8 сен 21:11 voip.sql.7z
+```
+
+ - Run the `MySQL` instance by [Docker Compose](https://docs.docker.com/compose/) with local db
 ```bash
 $ docker-compose -f ./10-dml-data-modification/docker-compose.yml up
 Creating network "10-dml-data-modification_default" with the default driver
