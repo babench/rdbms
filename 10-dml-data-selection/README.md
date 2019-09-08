@@ -1,4 +1,4 @@
-Data Manipulation Language: data modification
+Data Manipulation Language: data selection
 =======
 
 
@@ -229,7 +229,7 @@ mysql> select CAST(dc.code as UNSIGNED) as code, max(r.price)
 
  - Extract the database snapshot file from 7-Zip archive
 ```sql
-$ 7z x -o./10-dml-data-modification ./10-dml-data-modification/voip.sql.7z
+$ 7z x -o./10-dml-data-selection ./10-dml-data-selection/voip.sql.7z
 7-Zip [64] 16.02 : Copyright (c) 1999-2016 Igor Pavlov : 2016-05-21
 ...
 
@@ -238,7 +238,7 @@ Everything is Ok
 Size:       1194110062
 Compressed: 74360535
 
-$ ls -lah ./10-dml-data-modification
+$ ls -lah ./10-dml-data-selection
 total 2488200
 drwxr-xr-x   6 dima  staff   192B  8 сен 21:25 .
 drwxr-xr-x  18 dima  staff   576B  8 сен 21:20 ..
@@ -250,8 +250,8 @@ drwxr-xr-x  18 dima  staff   576B  8 сен 21:20 ..
 
  - Run the `MySQL` instance by [Docker Compose](https://docs.docker.com/compose/) with local db; it would take about 15 minutes
 ```bash
-$ docker-compose -f ./10-dml-data-modification/docker-compose.yml up
-Creating network "10-dml-data-modification_default" with the default driver
+$ docker-compose -f ./10-dml-data-selection/docker-compose.yml up
+Creating network "10-dml-data-selection_default" with the default driver
 Creating otus-database ... done
 Attaching to otus-database
 ...
@@ -297,9 +297,9 @@ Stopping otus-database ... done
 
  - Remove containers and networks
 ```bash
-$ docker-compose -f ./10-dml-data-modification/docker-compose.yml down
+$ docker-compose -f ./10-dml-data-selection/docker-compose.yml down
 Removing otus-database ... done
-Removing network 10-dml-data-modification_default
+Removing network 10-dml-data-selection_default
 ```
 
 
