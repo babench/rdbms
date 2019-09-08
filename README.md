@@ -25,6 +25,8 @@ DDL for a database with Docker container, schema of a database structure
 ## Homework 9: [Data Manipulation Language: data filling](https://github.com/DmitriySh/rdbms-course/tree/master/09-dml-data-filling)
 Example of DML for a database
 
+## Homework 10: [Data Manipulation Language: data modification](https://github.com/DmitriySh/rdbms-course/tree/master/10-dml-data-modification)
+Task to calculate a phone call price with
 
 ---
 
