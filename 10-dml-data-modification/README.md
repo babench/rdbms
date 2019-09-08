@@ -5,7 +5,7 @@ Data Manipulation Language: data modification
 ### Goal
 
  - Run [Docker](https://www.docker.com) container with `voip` database
- - Task: calculate the phone call price
+ - Task: calculate a phone call price
  - Tables for calculating the price of a phone call: `CDR`, `oper_ip`, `SITE`, `RATES` and `DEST_CODE`
  - `CDR` is the table of phone calls from an operator
 ```sql
