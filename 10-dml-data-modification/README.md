@@ -248,7 +248,7 @@ drwxr-xr-x  18 dima  staff   576B  8 сен 21:20 ..
 -rw-r--r--   1 dima  staff    71M  8 сен 21:11 voip.sql.7z
 ```
 
- - Run the `MySQL` instance by [Docker Compose](https://docs.docker.com/compose/) with local db
+ - Run the `MySQL` instance by [Docker Compose](https://docs.docker.com/compose/) with local db; it would take about 15 minutes
 ```bash
 $ docker-compose -f ./10-dml-data-modification/docker-compose.yml up
 Creating network "10-dml-data-modification_default" with the default driver
@@ -292,14 +292,14 @@ mysql> show tables;
 ```bash
 ...
 ^CGracefully stopping... (press Ctrl+C again to force)
-Killing otus-database  ... done
+Stopping otus-database ... done
 ```
 
  - Remove containers and networks
 ```bash
 $ docker-compose -f ./10-dml-data-modification/docker-compose.yml down
 Removing otus-database ... done
-Removing network 09-dml_default
+Removing network 10-dml-data-modification_default
 ```
 
 
