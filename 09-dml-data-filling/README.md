@@ -5,7 +5,7 @@ Data Manipulation Language: data filling
 ### Goal
 
  - Run [Docker](https://www.docker.com) container from a database image
- - Use [Docker Compose](https://docs.docker.com/compose/) with `DDL` script
+ - Use [Docker Compose](https://docs.docker.com/compose/) with `DDL` script to up the e-commerce store
  - Open an external port to connect to the database
  - Script `schema_postgresql.sql` is a DB schema (DDL)
  - Script `data_postgresql.sql` it is an initial DB state (DML)
