@@ -23,10 +23,10 @@ Add business tasks and edit schema
 DDL for a database with Docker container, schema of a database structure
 
 ## Homework 9: [Data Manipulation Language: data filling](https://github.com/DmitriySh/rdbms-course/tree/master/09-dml-data-filling)
-Example of DML for a database
+Example of DML for a database. Use `Docker Compose` to up the e-commerce store, temp table for manipulations, operations `insert`/`update`/`update by join`/`delete`/`call procedure`
 
 ## Homework 10: [Data Manipulation Language: data selection](https://github.com/DmitriySh/rdbms-course/tree/master/10-dml-data-selection)
-Task to calculate a phone call price with
+Task to calculate a phone call price by VoIP database. Use `JOIN` to combine several tables.
 
 ---
 
