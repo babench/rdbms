@@ -7,3 +7,7 @@
 
 ### OS ###
 *.DS_Store
+
+### Project temp files ###
+10-dml-data-selection/voip.sql
+
